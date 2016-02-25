@@ -5,7 +5,7 @@ public class Dragon extends Character
 	
 	public Dragon()
 	{
-		this(3, 1);
+		this(1, 3);
 	}
 	
 	public Dragon(int x, int y)
