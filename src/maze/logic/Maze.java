@@ -1,5 +1,6 @@
 package maze.logic;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Maze
@@ -9,7 +10,7 @@ public class Maze
 	Dragon fm = new Dragon();
 	boolean finished = false;
 
-	
+
 	public boolean getFinished()
 	{
 		return finished;
@@ -104,6 +105,40 @@ public class Maze
 		updateHeroPosition(newX, newY);
 	}
 
+	public void moveDragon()
+	{
+		Random rand = new Random();
+		int move = rand.nextInt(5);
+
+		int dx = 0;
+		int dy = 0;
+		int dragonX = fm.getX();
+		int dragonY = fm.getY();
+
+		if(move == 1) //move right
+			dx = 1;
+		else if(move == 2) //move right
+			dx = -1;
+		else if(move == 3) //move up
+			dy = -1;
+		else if(move == 4) //move down
+			dy = 1;
+		
+
+		System.out.println("Move: " + move + "Dx: " + dx + "  Dy: " + dy);
+		
+		if(matrix[dragonY + dy][dragonX + dx] == 'X')
+			return;
+		
+		fm.setX(dragonX + dx);
+		fm.setY(dragonY + dy);
+		
+		
+		matrix[dragonY][dragonX] = ' ';
+		matrix[dragonY + dy][dragonX + dx] = fm.getChar();
+		
+	}
+
 	public void updateHeroPosition(int newX, int newY)
 	{
 		int oldX = sirWilliam.getX();
@@ -119,10 +154,16 @@ public class Maze
 
 	public void updateGame()
 	{
-		//moveHero(3, 0);
-		//moveHero(0, 4);
-		//moveHero(1, 0);
-		int[] dx = new int[1];
+		moveHero(3, 0);
+		moveDragon();
+		print();
+		moveHero(0, 4);
+		moveDragon();
+		print();
+		moveHero(1, 0);
+		moveDragon();
+		print();
+		/*int[] dx = new int[1];
 		int[] dy = new int[1];
 		dx[0] = 0;
 		dy[0] = 0;
@@ -132,7 +173,7 @@ public class Maze
 		moveHero(dx[0],dy[0]);
 		print();
 		dx[0] = 0;
-		dy[0] = 0;
+		dy[0] = 0;*/
 	}
 
 	public void readInput(int[] dx, int[] dy)
@@ -152,6 +193,9 @@ public class Maze
 				dx[0] = 1;
 
 		}
+		else
+			s.next().charAt(0);
+
 		s.close();
 
 	}
@@ -160,10 +204,10 @@ public class Maze
 	{
 		Maze myMaze = new Maze();
 
-		while(!myMaze.getFinished())
-		{
+		//while(!myMaze.getFinished())
+		//{
 			myMaze.updateGame();
-		}
+	//	}
 	}
 
 }
