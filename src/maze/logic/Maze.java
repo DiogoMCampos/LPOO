@@ -101,6 +101,14 @@ public class Maze
 
 			return;
 		}
+		
+		if (newX == 1 && newY == 8) 
+		{
+			if (!sirWilliam.getSword())
+			{
+				sirWilliam.setSword();
+			}
+		}
 
 		updateHeroPosition(newX, newY);
 	}
@@ -115,26 +123,23 @@ public class Maze
 		int dragonX = fm.getX();
 		int dragonY = fm.getY();
 
-		if(move == 1) //move right
+		if(move == 1) // move right
 			dx = 1;
-		else if(move == 2) //move right
+		else if(move == 2) // move left
 			dx = -1;
-		else if(move == 3) //move up
+		else if(move == 3) // move up
 			dy = -1;
-		else if(move == 4) //move down
+		else if(move == 4) // move down
 			dy = 1;
-		
-
-		System.out.println("Move: " + move + "Dx: " + dx + "  Dy: " + dy);
 		
 		if(matrix[dragonY + dy][dragonX + dx] == 'X')
 			return;
 		
+		matrix[dragonY][dragonX] = ' ';
+		
 		fm.setX(dragonX + dx);
 		fm.setY(dragonY + dy);
 		
-		
-		matrix[dragonY][dragonX] = ' ';
 		matrix[dragonY + dy][dragonX + dx] = fm.getChar();
 		
 	}
@@ -154,60 +159,41 @@ public class Maze
 
 	public void updateGame()
 	{
-		moveHero(3, 0);
 		moveDragon();
+		readInput();
 		print();
-		moveHero(0, 4);
-		moveDragon();
-		print();
-		moveHero(1, 0);
-		moveDragon();
-		print();
-		/*int[] dx = new int[1];
-		int[] dy = new int[1];
-		dx[0] = 0;
-		dy[0] = 0;
-
-		readInput(dx,dy);
-		System.out.println("Dx: " + dx[0] + "  Dy: " + dy[0]);
-		moveHero(dx[0],dy[0]);
-		print();
-		dx[0] = 0;
-		dy[0] = 0;*/
 	}
 
-	public void readInput(int[] dx, int[] dy)
+	public void readInput()
 	{
 		Scanner s = new Scanner(System.in);
-
-		if(s.hasNextLine())
-		{
-			char dir = s.next().charAt(0);
-			if(dir == 'S' || dir == 's')
-				dy[0] = 1;
-			else if (dir == 'N' || dir == 'n')
-				dy[0] = -1;
-			else if (dir == 'A' || dir == 'a')
-				dx[0] = -1;
-			else if (dir == 'D' || dir == 'd')
-				dx[0] = 1;
-
-		}
-		else
-			s.next().charAt(0);
-
-		s.close();
-
+		
+		String direction;
+		
+		do {
+			direction = s.next();
+		} while (!(direction.equals("w") || direction.equals("a") || direction.equals("s") || direction.equals("d")));
+		
+		//s.close();
+		
+		if (direction.equals("w")) 
+			moveHero(0, -1);
+		else if (direction.equals("a"))
+			moveHero(-1, 0);
+		else if (direction.equals("s"))
+			moveHero(0, 1);
+		else 
+			moveHero(1, 0);
 	}
 
 	public static void main(String[] args) 
 	{
 		Maze myMaze = new Maze();
 
-		//while(!myMaze.getFinished())
-		//{
+		while(!myMaze.getFinished())
+		{
 			myMaze.updateGame();
-	//	}
+		}
 	}
 
 }
