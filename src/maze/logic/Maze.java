@@ -85,11 +85,14 @@ public class Maze
 			if (!sirWilliam.getSword())
 			{
 				sirWilliam.dies();
+				System.out.println("Oh no, Sir William just died!");
 				this.finished = true;
+				print();
 				return;
 			}
-
+			
 			fm.dies();
+			System.out.println("The dragon has been killed!");
 		}
 
 		if (newX == 9 && newY == 6)
@@ -97,6 +100,7 @@ public class Maze
 			if (!fm.life)
 			{
 				this.finished = true;
+				System.out.println("Congratulations, you just won the game!");
 			}
 
 			return;
@@ -107,6 +111,7 @@ public class Maze
 			if (!sirWilliam.getSword())
 			{
 				sirWilliam.setSword();
+				System.out.println("Sir William just got an amazing sword!");
 			}
 		}
 
@@ -132,7 +137,7 @@ public class Maze
 		else if(move == 4) // move down
 			dy = 1;
 		
-		if(matrix[dragonY + dy][dragonX + dx] == 'X')
+		if(matrix[dragonY + dy][dragonX + dx] == 'X' || matrix[dragonY + dy][dragonX + dx] == 'E')
 			return;
 		
 		matrix[dragonY][dragonX] = ' ';
@@ -171,6 +176,7 @@ public class Maze
 		String direction;
 		
 		do {
+			System.out.println("Move Sir William with WASD keys: ");
 			direction = s.next();
 		} while (!(direction.equals("w") || direction.equals("a") || direction.equals("s") || direction.equals("d")));
 		
