@@ -3,6 +3,8 @@ package maze.logic;
 import java.util.Random;
 import java.util.Scanner;
 
+import maze.cli.*;
+
 public class Maze
 {
 	char matrix[][] = new char[10][10];
@@ -10,11 +12,11 @@ public class Maze
 	Dragon fm = new Dragon();
 	boolean finished = false;
 
-
 	public boolean getFinished()
 	{
 		return finished;
 	}
+
 	public Maze()
 	{
 		for (int i = 0; i < matrix.length; i++) 
@@ -51,23 +53,7 @@ public class Maze
 		matrix[8][1] = 'E';
 		matrix[6][9] = 'S';
 
-		this.print();
-	}
-
-	public void print()
-	{
-		for (int i = 0; i < matrix.length; i++) 
-		{
-			for (int j = 0; j < matrix[i].length; j++)
-			{
-				if (j == matrix[i].length - 1)
-					System.out.println(matrix[i][j]);
-				else
-					System.out.print(matrix[i][j] + " ");
-			}
-		}
-
-		System.out.println();
+		Interface.print(matrix);
 	}
 
 	public void moveHero(int dx, int dy) 
@@ -76,7 +62,7 @@ public class Maze
 		int newY = sirWilliam.getY() + dy;
 		int dragonX = fm.getX();
 		int dragonY = fm.getY();
-
+		
 		if (matrix[newY][newX] == 'X')
 			return;
 
@@ -133,12 +119,12 @@ public class Maze
 			if(fm.getSleep())
 			{	
 				fm.setSleep(false);
-				System.out.println("Be careful, the dragon has awaken!");
+				System.out.println("Be careful, the dragon has awoken!");
 			}
 			else
 			{
 				fm.setSleep(true);
-				System.out.println("The dragon felt asleep!");
+				System.out.println("The dragon fell asleep!");
 			}
 		}
 
@@ -215,34 +201,24 @@ public class Maze
 	public void updateGame()
 	{
 		sleepDragon();
+		
 		if(!fm.getSleep())
 			moveDragon();
-		readInput();
-		print();
-	}
-
-	public void readInput()
-	{
-		Scanner s = new Scanner(System.in);
-
-		String direction;
-
-		do {
-			System.out.println("Move Sir William with WASD keys: ");
-			direction = s.next();
-		} while (!(direction.equals("w") || direction.equals("a") || direction.equals("s") || direction.equals("d")));
-
-		//s.close();
-
-		if (direction.equals("w")) 
+		
+		int movement = Interface.readInput();
+		
+		if (movement == 0)
 			moveHero(0, -1);
-		else if (direction.equals("a"))
+		else if (movement == 1)
 			moveHero(-1, 0);
-		else if (direction.equals("s"))
+		else if (movement == 2)
 			moveHero(0, 1);
-		else 
+		else
 			moveHero(1, 0);
+		
+		Interface.print(matrix);
 	}
+
 
 	public static void main(String[] args) 
 	{
