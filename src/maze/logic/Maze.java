@@ -11,6 +11,7 @@ public class Maze
 	Hero sirWilliam = new Hero();
 	Dragon fm = new Dragon();
 	boolean finished = false;
+	int mode;
 
 	public boolean getFinished()
 	{
@@ -53,7 +54,6 @@ public class Maze
 		matrix[8][1] = 'E';
 		matrix[6][9] = 'S';
 
-		Interface.print(matrix);
 	}
 
 	public void moveHero(int dx, int dy) 
@@ -62,7 +62,7 @@ public class Maze
 		int newY = sirWilliam.getY() + dy;
 		int dragonX = fm.getX();
 		int dragonY = fm.getY();
-		
+
 		if (matrix[newY][newX] == 'X')
 			return;
 
@@ -200,13 +200,14 @@ public class Maze
 
 	public void updateGame()
 	{
-		sleepDragon();
-		
-		if(!fm.getSleep())
+		if(mode == 3)
+			sleepDragon();
+
+		if(!fm.getSleep() && (mode == 2 || mode == 3))
 			moveDragon();
-		
+
 		int movement = Interface.readInput();
-		
+
 		if (movement == 0)
 			moveHero(0, -1);
 		else if (movement == 1)
@@ -215,7 +216,7 @@ public class Maze
 			moveHero(0, 1);
 		else
 			moveHero(1, 0);
-		
+
 		Interface.print(matrix);
 	}
 
@@ -224,6 +225,10 @@ public class Maze
 	{
 		Maze myMaze = new Maze();
 
+		myMaze.mode = Interface.chooseMode();
+
+		Interface.print(myMaze.matrix);
+		
 		while(!myMaze.getFinished())
 		{
 			myMaze.updateGame();
