@@ -6,7 +6,7 @@ public class Interface {
 
 	public Interface() {}
 
-	public static void print(char[][] matrix)
+	public void print(char[][] matrix)
 	{
 		for (int i = 0; i < matrix.length; i++) 
 		{
@@ -22,7 +22,7 @@ public class Interface {
 		System.out.println();
 	}
 
-	public static int readInput()
+	public int readInput()
 	{
 		Scanner s = new Scanner(System.in);
 
@@ -45,7 +45,7 @@ public class Interface {
 			return 3;
 	}
 
-	public static int chooseMode()
+	public int chooseMode()
 	{
 
 		Scanner s = new Scanner(System.in);

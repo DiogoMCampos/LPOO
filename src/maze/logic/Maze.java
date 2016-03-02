@@ -244,6 +244,20 @@ public class Maze
 
 		textInterface.print(matrix);
 	}
+	
+	public void playGame()
+	{
+		this.mode = textInterface.chooseMode();
+		
+		textInterface.print(this.matrix);
+		
+		
+		while(!getFinished())
+		{
+			updateGame();
+		}
+		
+	}
 
 
 	public static void main(String[] args) 
@@ -255,15 +269,8 @@ public class Maze
 				{'X', 'X', 'X', 'X', 'X'}};
 		
 		Maze myMaze = new Maze(m1);
-
-		myMaze.mode = textInterface.chooseMode();
-
-		textInterface.print(myMaze.matrix);
 		
-		while(!myMaze.getFinished())
-		{
-			myMaze.updateGame();
-		}
+		myMaze.playGame();
 	}
 
 }
