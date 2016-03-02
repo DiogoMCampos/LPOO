@@ -64,7 +64,35 @@ public class Interface {
 		} while (direction != 1 && direction != 2 && direction != 3);
 		
 		return direction;
-
 	}
-
+	
+	public void msgHeroDied()
+	{
+		System.out.println("Oh no, Sir William just died!");
+	}
+	
+	public void msgDragonDies()
+	{
+		System.out.println("The dragon has been killed!");
+	}
+	
+	public void msgWinGame()
+	{
+		System.out.println("Congratulations, you just won the game!");
+	}
+	
+	public void msgGetSword()
+	{
+		System.out.println("Sir William just got an amazing sword!");
+	}
+	
+	public void msgDragonAwake()
+	{
+		System.out.println("Be careful, the dragon has awoken!");
+	}
+	
+	public void msgDragonSleep()
+	{
+		System.out.println("The dragon fell asleep!");
+	}
 }
