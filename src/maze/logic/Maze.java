@@ -73,6 +73,26 @@ public class Maze
 		}
 	}
 
+	public Point getHeroPosition() 
+	{
+		return sirWilliam.getPosition();
+	}
+	
+	public char getHeroChar()
+	{
+		return sirWilliam.getChar();
+	}
+	
+	public boolean getHeroLife()
+	{
+		return sirWilliam.getLife();
+	}
+	
+	public boolean getDragonLife()
+	{
+		return fm.getLife();
+	}
+	
 	public void moveHero(int dx, int dy) 
 	{
 		int newX = sirWilliam.getX() + dx;
@@ -82,35 +102,7 @@ public class Maze
 
 		if (matrix[newY][newX] == 'X')
 			return;
-		/////////////////////*********************///////////////////////////
-		/////////////////////*********  **********///////////////////////////
-		/////////////////////*******      ********///////////////////////////
-		/////////////////////*****          ******///////////////////////////
-		// TODO Mudar esta verificação para o fim, tirar condição da diagonal
-		/////////////////////*****          ******///////////////////////////
-		/////////////////////*******      ********///////////////////////////
-		/////////////////////*********  **********///////////////////////////
-		/////////////////////*********************///////////////////////////
-		if (Math.abs(dragonX - newX) <= 1 && Math.abs(dragonY - newY) <= 1)
-		{
-			if (!sirWilliam.getSword() && !fm.getSleep())
-			{
-				sirWilliam.dies();
-				int sY = sirWilliam.getY();
-				int sX = sirWilliam.getX();
-				matrix[sY][sX] = ' ';
-				textInterface.msgHeroDied();
-				this.finished = true;
-				return;
-			}
-
-			else if(sirWilliam.getSword())
-			{
-				fm.dies();
-				textInterface.msgDragonDies();
-			}
-		}
-
+		
 		if (matrix[newY][newX] == 'S')
 		{
 			if (!fm.life)
@@ -132,6 +124,27 @@ public class Maze
 		}
 
 		updateHeroPosition(newX, newY);
+		
+		if (sirWilliam.isAdjacent(fm))
+		{
+			if (!sirWilliam.getSword() && !fm.getSleep())
+			{
+				sirWilliam.dies();
+				int sY = sirWilliam.getY();
+				int sX = sirWilliam.getX();
+				matrix[sY][sX] = ' ';
+				textInterface.msgHeroDied();
+				this.finished = true;
+				return;
+			}
+
+			else if(sirWilliam.getSword())
+			{
+				fm.dies();
+				matrix[fm.getY()][fm.getX()] = ' ';
+				textInterface.msgDragonDies();
+			}
+		}
 	}
 
 	public void sleepDragon()
@@ -251,14 +264,12 @@ public class Maze
 		
 		textInterface.print(this.matrix);
 		
-		
 		while(!getFinished())
 		{
 			updateGame();
 		}
 		
 	}
-
 
 	public static void main(String[] args) 
 	{

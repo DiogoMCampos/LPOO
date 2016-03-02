@@ -2,7 +2,7 @@ package maze.logic;
 
 public class Character 
 {
-	int x, y;
+	Point position;
 	boolean life;
 	char visual;
 	
@@ -13,8 +13,7 @@ public class Character
 	
 	public Character(int x, int y)
 	{
-		this.x = x;
-		this.y = y;
+		this.position = new Point(x, y);
 		this.life = true;
 	}
 	
@@ -25,27 +24,42 @@ public class Character
 	
 	public int getX()
 	{
-		return x;
+		return position.getX();
 	}
 	
 	public int getY()
 	{
-		return y;
+		return position.getY();
+	}
+	
+	public Point getPosition()
+	{
+		return position;
 	}
 	
 	public void setX(int x)
 	{
-		this.x = x;
+		this.position.setX(x);
 	}
 	
 	public void setY(int y)
 	{
-		this.y = y;
+		this.position.setY(y);
 	}
 	
 	public void dies()
 	{
 		this.life = false;
 		this.visual = ' ';
+	}
+	
+	public boolean isAdjacent(Character comparable)
+	{
+		return this.position.isAdjacent(comparable.getPosition());
+	}
+	
+	public boolean getLife()
+	{
+		return life;
 	}
 }
