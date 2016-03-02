@@ -39,4 +39,14 @@ public class Point
 
 		return false;
 	}
+	
+	@Override
+	public boolean equals(Object comparable)
+	{
+		if (this.getClass() != comparable.getClass())
+			return false;
+		
+		Point p2 = (Point) comparable;
+		return (this.x == p2.getX() && this.y == p2.getY());
+	}
 }
