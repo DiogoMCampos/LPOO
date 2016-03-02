@@ -7,6 +7,7 @@ import maze.cli.*;
 
 public class Maze
 {
+	Interface textInterface = new Interface();
 	char matrix[][] = new char[10][10];
 	Hero sirWilliam = new Hero();
 	Dragon fm = new Dragon();
@@ -55,6 +56,22 @@ public class Maze
 		matrix[6][9] = 'S';
 
 	}
+	
+	public Maze(char[][] matrix)
+	{
+		this.matrix = matrix;
+		
+		for (int i = 0; i < matrix.length; i++) 
+		{
+			for (int j = 0; j < matrix[i].length; j++)
+			{
+				if (matrix[i][j] == 'H')
+					sirWilliam = new Hero(j, i);
+				else if (matrix[i][j] == 'D')
+					fm = new Dragon(j, i);
+			}
+		}
+	}
 
 	public void moveHero(int dx, int dy) 
 	{
@@ -65,7 +82,15 @@ public class Maze
 
 		if (matrix[newY][newX] == 'X')
 			return;
-
+		/////////////////////*********************///////////////////////////
+		/////////////////////*********  **********///////////////////////////
+		/////////////////////*******      ********///////////////////////////
+		/////////////////////*****          ******///////////////////////////
+		// TODO Mudar esta verificação para o fim, tirar condição da diagonal
+		/////////////////////*****          ******///////////////////////////
+		/////////////////////*******      ********///////////////////////////
+		/////////////////////*********  **********///////////////////////////
+		/////////////////////*********************///////////////////////////
 		if (Math.abs(dragonX - newX) <= 1 && Math.abs(dragonY - newY) <= 1)
 		{
 			if (!sirWilliam.getSword() && !fm.getSleep())
@@ -74,7 +99,7 @@ public class Maze
 				int sY = sirWilliam.getY();
 				int sX = sirWilliam.getX();
 				matrix[sY][sX] = ' ';
-				System.out.println("Oh no, Sir William just died!");
+				textInterface.msgHeroDied();
 				this.finished = true;
 				return;
 			}
@@ -82,27 +107,27 @@ public class Maze
 			else if(sirWilliam.getSword())
 			{
 				fm.dies();
-				System.out.println("The dragon has been killed!");
+				textInterface.msgDragonDies();
 			}
 		}
 
-		if (newX == 9 && newY == 6)
+		if (matrix[newY][newX] == 'S')
 		{
 			if (!fm.life)
 			{
 				this.finished = true;
-				System.out.println("Congratulations, you just won the game!");
+				textInterface.msgWinGame();
 			}
 
 			return;
 		}
 
-		if (newX == 1 && newY == 8) 
+		if (matrix[newY][newX] == 'E') 
 		{
 			if (!sirWilliam.getSword())
 			{
 				sirWilliam.setSword();
-				System.out.println("Sir William just got an amazing sword!");
+				textInterface.msgGetSword();
 			}
 		}
 
@@ -119,12 +144,12 @@ public class Maze
 			if(fm.getSleep())
 			{	
 				fm.setSleep(false);
-				System.out.println("Be careful, the dragon has awoken!");
+				textInterface.msgDragonAwake();
 			}
 			else
 			{
 				fm.setSleep(true);
-				System.out.println("The dragon fell asleep!");
+				textInterface.msgDragonSleep();
 			}
 		}
 
@@ -206,7 +231,7 @@ public class Maze
 		if(!fm.getSleep() && (mode == 2 || mode == 3))
 			moveDragon();
 
-		int movement = Interface.readInput();
+		int movement = textInterface.readInput();
 
 		if (movement == 0)
 			moveHero(0, -1);
@@ -217,17 +242,23 @@ public class Maze
 		else
 			moveHero(1, 0);
 
-		Interface.print(matrix);
+		textInterface.print(matrix);
 	}
 
 
 	public static void main(String[] args) 
 	{
-		Maze myMaze = new Maze();
+		char [][] m1 = {{'X', 'X', 'X', 'X', 'X'},
+				{'X', ' ', ' ', 'H', 'S'},
+				{'X', ' ', 'X', ' ', 'X'},
+				{'X', 'E', ' ', 'D', 'X'},
+				{'X', 'X', 'X', 'X', 'X'}};
+		
+		Maze myMaze = new Maze(m1);
 
-		myMaze.mode = Interface.chooseMode();
+		myMaze.mode = textInterface.chooseMode();
 
-		Interface.print(myMaze.matrix);
+		textInterface.print(myMaze.matrix);
 		
 		while(!myMaze.getFinished())
 		{
