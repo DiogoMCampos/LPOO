@@ -1,7 +1,6 @@
 package maze.logic;
 
 import java.util.Random;
-import java.util.Scanner;
 
 import maze.cli.*;
 
@@ -108,6 +107,7 @@ public class Maze
 			if (!fm.life)
 			{
 				this.finished = true;
+				updateHeroPosition(newX, newY);
 				textInterface.msgWinGame();
 			}
 
@@ -125,7 +125,7 @@ public class Maze
 
 		updateHeroPosition(newX, newY);
 		
-		if (sirWilliam.isAdjacent(fm))
+		if (sirWilliam.isAdjacent(fm) && fm.getLife())
 		{
 			if (!sirWilliam.getSword() && !fm.getSleep())
 			{
@@ -141,7 +141,7 @@ public class Maze
 			else if(sirWilliam.getSword())
 			{
 				fm.dies();
-				matrix[fm.getY()][fm.getX()] = ' ';
+				matrix[dragonY][dragonX] = ' ';
 				textInterface.msgDragonDies();
 			}
 		}
@@ -271,6 +271,11 @@ public class Maze
 		
 	}
 
+	public void endInterface()
+	{
+		textInterface.finalize();
+	}
+	
 	public static void main(String[] args) 
 	{
 		char [][] m1 = {{'X', 'X', 'X', 'X', 'X'},
@@ -282,6 +287,8 @@ public class Maze
 		Maze myMaze = new Maze(m1);
 		
 		myMaze.playGame();
+		
+		myMaze.endInterface();
 	}
 
 }

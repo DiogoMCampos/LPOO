@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Interface {
 
+	Scanner s = new Scanner(System.in);
 	public Interface() {}
 
 	public void print(char[][] matrix)
@@ -24,7 +25,7 @@ public class Interface {
 
 	public int readInput()
 	{
-		Scanner s = new Scanner(System.in);
+		
 
 		String direction;
 
@@ -47,9 +48,6 @@ public class Interface {
 
 	public int chooseMode()
 	{
-
-		Scanner s = new Scanner(System.in);
-
 		int direction = 0;
 
 		do 
@@ -94,5 +92,10 @@ public class Interface {
 	public void msgDragonSleep()
 	{
 		System.out.println("The dragon fell asleep!");
+	}
+	
+	public void finalize()
+	{
+		s.close();
 	}
 }
