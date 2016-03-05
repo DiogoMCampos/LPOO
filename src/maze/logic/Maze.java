@@ -55,11 +55,11 @@ public class Maze
 		matrix[6][9] = 'S';
 
 	}
-	
+
 	public Maze(char[][] matrix)
 	{
 		this.matrix = matrix;
-		
+
 		for (int i = 0; i < matrix.length; i++) 
 		{
 			for (int j = 0; j < matrix[i].length; j++)
@@ -76,22 +76,27 @@ public class Maze
 	{
 		return sirWilliam.getPosition();
 	}
-	
+
+	public Point getDragonPosition()
+	{
+		return fm.getPosition();
+	}
+
 	public char getHeroChar()
 	{
 		return sirWilliam.getChar();
 	}
-	
+
 	public boolean getHeroLife()
 	{
 		return sirWilliam.getLife();
 	}
-	
+
 	public boolean getDragonLife()
 	{
 		return fm.getLife();
 	}
-	
+
 	public void moveHero(int dx, int dy) 
 	{
 		int newX = sirWilliam.getX() + dx;
@@ -101,7 +106,7 @@ public class Maze
 
 		if (matrix[newY][newX] == 'X')
 			return;
-		
+
 		if (matrix[newY][newX] == 'S')
 		{
 			if (!fm.life)
@@ -124,7 +129,7 @@ public class Maze
 		}
 
 		updateHeroPosition(newX, newY);
-		
+
 		if (sirWilliam.isAdjacent(fm) && fm.getLife())
 		{
 			if (!sirWilliam.getSword() && !fm.getSleep())
@@ -172,27 +177,54 @@ public class Maze
 		matrix[dragonY][dragonX] = fm.getChar();
 	}
 
-	public void moveDragon()
+	public boolean decideMove()
 	{
 		Random rand = new Random();
 		int move = rand.nextInt(5);
 
+		if(move == 0)
+			return false;
+		else
+			return true;
+	}
+	public void moveDragon()
+	{
 		int dx = 0;
 		int dy = 0;
 		int dragonX = fm.getX();
 		int dragonY = fm.getY();
 
-		if(move == 1) // move right
-			dx = 1;
-		else if(move == 2) // move left
-			dx = -1;
-		else if(move == 3) // move up
-			dy = -1;
-		else if(move == 4) // move down
-			dy = 1;
+		boolean validMovement = true;
 
-		if(matrix[dragonY + dy][dragonX + dx] == 'X')
-			return;
+		do
+		{
+			Random rand = new Random();
+			int move = rand.nextInt(4);
+
+			if(move == 0) // move right
+				dx = 1;
+			else if(move == 1) // move left
+				dx = -1;
+			else if(move == 2) // move up
+				dy = -1;
+			else if(move == 3) // move down
+				dy = 1;
+			
+			if(matrix[dragonY + dy][dragonX + dx] == 'X')
+			{
+				validMovement = false;
+				System.out.println(matrix[dragonY][dragonX ]);
+				System.out.println(matrix[dragonY + dy][dragonX + dx]);
+				dx = 0;
+				dy = 0;
+			}
+			System.out.println("X " + (dragonX) + " dx " + dx +  "  Y " + (dragonY) + "dy " + dy);
+			
+			
+		}while(!validMovement);
+
+
+	
 
 		if(matrix[dragonY + dy][dragonX + dx] == 'E')
 		{
@@ -241,7 +273,7 @@ public class Maze
 		if(mode == 3)
 			sleepDragon();
 
-		if(!fm.getSleep() && (mode == 2 || mode == 3))
+		if(!fm.getSleep() && (mode == 2 || mode == 3) && decideMove())
 			moveDragon();
 
 		int movement = textInterface.readInput();
@@ -257,25 +289,25 @@ public class Maze
 
 		textInterface.print(matrix);
 	}
-	
+
 	public void playGame()
 	{
 		this.mode = textInterface.chooseMode();
-		
+
 		textInterface.print(this.matrix);
-		
+
 		while(!getFinished())
 		{
 			updateGame();
 		}
-		
+
 	}
 
 	public void endInterface()
 	{
 		textInterface.finalize();
 	}
-	
+
 	public static void main(String[] args) 
 	{
 		char [][] m1 = {{'X', 'X', 'X', 'X', 'X'},
@@ -283,11 +315,11 @@ public class Maze
 				{'X', ' ', 'X', ' ', 'X'},
 				{'X', 'E', ' ', 'D', 'X'},
 				{'X', 'X', 'X', 'X', 'X'}};
-		
+
 		Maze myMaze = new Maze(m1);
-		
+
 		myMaze.playGame();
-		
+
 		myMaze.endInterface();
 	}
 
