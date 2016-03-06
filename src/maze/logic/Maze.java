@@ -86,6 +86,11 @@ public class Maze
 	{
 		return sirWilliam.getChar();
 	}
+	
+	public char getDragonChar()
+	{
+		return fm.getChar();
+	}
 
 	public boolean getHeroLife()
 	{
@@ -161,12 +166,12 @@ public class Maze
 		{
 			if(fm.getSleep())
 			{	
-				fm.setSleep(false);
+				setDragonSleep(false);
 				textInterface.msgDragonAwake();
 			}
 			else
 			{
-				fm.setSleep(true);
+				setDragonSleep(true);
 				textInterface.msgDragonSleep();
 			}
 		}
@@ -175,6 +180,11 @@ public class Maze
 		int dragonX = fm.getX();
 		int dragonY = fm.getY();
 		matrix[dragonY][dragonX] = fm.getChar();
+	}
+	
+	public void setDragonSleep(boolean state)
+	{
+		fm.setSleep(state);
 	}
 
 	public boolean decideMove()
@@ -210,15 +220,14 @@ public class Maze
 			else if(move == 3) // move down
 				dy = 1;
 			
-			if(matrix[dragonY + dy][dragonX + dx] == 'X')
+			if(matrix[dragonY + dy][dragonX + dx] == 'X' || matrix[dragonY + dy][dragonX + dx] == 'S')
 			{
 				validMovement = false;
-				System.out.println(matrix[dragonY][dragonX ]);
-				System.out.println(matrix[dragonY + dy][dragonX + dx]);
 				dx = 0;
 				dy = 0;
 			}
-			System.out.println("X " + (dragonX) + " dx " + dx +  "  Y " + (dragonY) + "dy " + dy);
+			else
+				validMovement = true;
 			
 			
 		}while(!validMovement);

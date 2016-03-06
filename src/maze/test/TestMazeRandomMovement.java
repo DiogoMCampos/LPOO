@@ -17,14 +17,7 @@ public class TestMazeRandomMovement
 	{
 		Maze maze = new Maze(m1);
 		assertEquals(new Point(3, 3), maze.getDragonPosition());
-		int i = 0;
-		while(i < 5)
-		{
-			maze.moveDragon();
-			if(maze.getDragonPosition() != new Point(3,3))
-				break;
-			i++;
-		}
+		maze.moveDragon();
 		assertNotEquals(new Point(3,3), maze.getDragonPosition());
 	}
 
