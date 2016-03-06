@@ -18,44 +18,6 @@ public class Maze
 		return finished;
 	}
 
-	public Maze()
-	{
-		for (int i = 0; i < matrix.length; i++) 
-		{
-			for (int j = 0; j < matrix[i].length; j++)
-			{
-				if (i == 0 || i == matrix.length - 1 || j == 0 || j == matrix.length - 1) 
-				{
-					matrix[i][j] = 'X';
-				}
-
-				else if (((i > 1 && i < 5) || i == 6 || i == 7) && (j == 2 || j == 3 || j == 5 || j == 7))
-				{
-					matrix[i][j] = 'X';
-				}
-
-				else if (i == 5 && j == 7)
-				{
-					matrix[i][j] = 'X';
-				}
-
-				else if (i == 8 && (j == 2 || j == 3) )
-				{
-					matrix[i][j] = 'X';
-				}
-
-				else
-					matrix[i][j] = ' ';	
-			}
-		}
-
-		matrix[1][1] = sirWilliam.getChar();
-		matrix[3][1] = fm.getChar();
-		matrix[8][1] = 'E';
-		matrix[6][9] = 'S';
-
-	}
-
 	public Maze(char[][] matrix)
 	{
 		this.matrix = matrix;
@@ -320,13 +282,28 @@ public class Maze
 	public static void main(String[] args) 
 	{
 		char [][] m1 = {{'X', 'X', 'X', 'X', 'X'},
-				{'X', ' ', ' ', 'H', 'S'},
-				{'X', ' ', 'X', ' ', 'X'},
-				{'X', 'E', ' ', 'D', 'X'},
-				{'X', 'X', 'X', 'X', 'X'}};
+						{'X', ' ', ' ', 'H', 'S'},
+						{'X', ' ', 'X', ' ', 'X'},
+						{'X', 'E', ' ', 'D', 'X'},
+						{'X', 'X', 'X', 'X', 'X'}};
+		
+		char [][] m2 = {{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+						{'X', 'H', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
+						{'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
+						{'X', 'D', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
+						{'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
+						{'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X', ' ', 'S'},
+						{'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
+						{'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
+						{'X', 'E', 'X', 'X', ' ', ' ', ' ', ' ', ' ', 'X'},
+						{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 
-		Maze myMaze = new Maze(m1);
-
+		MazeBuilder mb = new MazeBuilder(9);
+		
+		char [][] m3 = mb.getMaze();
+		
+		Maze myMaze = new Maze(m3);
+		
 		myMaze.playGame();
 
 		myMaze.endInterface();

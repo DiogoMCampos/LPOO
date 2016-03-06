@@ -7,6 +7,11 @@ public class MazeBuilder {
   char maze[][];
   int mazeSize;
 
+  public char[][] getMaze()
+  {
+	  return maze;
+  }
+  
   // restriction: size has to be an odd number
   public MazeBuilder(int size)
   {
@@ -26,7 +31,7 @@ public class MazeBuilder {
     int genSide = rand.nextInt(4);
     int genLimit = (size - 1) / 2;
     int index = ((rand.nextInt(genLimit) + 1) * 2) - 1;
-    int startingX, startingY;
+    int startingX = 0, startingY = 0;
 
     if (genSide == 0) // left side
     {
@@ -38,18 +43,18 @@ public class MazeBuilder {
     {
       maze[size - 1][index] = 'S';
       startingX = index;
-      startingY = size - 1;
+      startingY = size - 2;
     }
     else if (genSide == 2) // upper side
     {
       maze[index][0] = 'S';
-      startingX = 0;
+      startingX = 1;
       startingY = index;
     }
     else if (genSide == 3) // lower side
     {
       maze[index][size -1] = 'S';
-      startingX = size - 1;
+      startingX = size - 2;
       startingY = index;
     }
 

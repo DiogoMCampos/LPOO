@@ -23,6 +23,8 @@ public class TestMazeDragonSleep
 		maze.moveHero(0, 1);
 		assertEquals(new Point(3,2), maze.getHeroPosition());
 		assertEquals(true, maze.getHeroLife());
+		maze.setDragonSleep(false);
+		assertEquals('D', maze.getDragonChar());
 	}
 	
 	@Test
