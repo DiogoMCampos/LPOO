@@ -124,6 +124,10 @@ public class MazeBuilder {
 				maze[currentPoint.getY()][currentPoint.getX()] = ' ';
 			}
 		} while (!mazeHistory.empty());
+		
+		placeDragon();
+		placeHero();
+		placeSword();
 	}
 
 	private Point genStartingPoint()
@@ -213,5 +217,62 @@ public class MazeBuilder {
 
 			return !mazeDone[currentPointBool.getY() + 1][currentPointBool.getX()];
 		}
+	}
+	
+	public void placeDragon()
+	{		
+		Random rand = new Random();
+		
+		boolean validPosition;
+		do
+		{
+			int x = rand.nextInt(mazeSize);
+			int y = rand.nextInt(mazeSize);
+			if(maze[y][x] == 'X' || maze[y][x] == 'E' || maze[y][x] == 'S')
+				validPosition = false;
+			else
+			{
+				validPosition = true;
+				maze[y][x] = 'D';
+			}
+		}while(!validPosition);
+	}
+	
+	public void placeHero()
+	{		
+		Random rand = new Random();
+		
+		boolean validPosition;
+		do
+		{
+			int x = rand.nextInt(mazeSize);
+			int y = rand.nextInt(mazeSize);
+			if(maze[y][x] == 'X' || maze[y][x] == 'E' || maze[y][x] == 'S' || maze[y][x] == 'D')
+				validPosition = false;
+			else
+			{
+				validPosition = true;
+				maze[y][x] = 'H';
+			}
+		}while(!validPosition);
+	}
+	
+	public void placeSword()
+	{		
+		Random rand = new Random();
+		
+		boolean validPosition;
+		do
+		{
+			int x = rand.nextInt(mazeSize);
+			int y = rand.nextInt(mazeSize);
+			if(maze[y][x] == 'X' || maze[y][x] == 'S' || maze[y][x] == 'D' || maze[y][x] == 'H')
+				validPosition = false;
+			else
+			{
+				validPosition = true;
+				maze[y][x] = 'E';
+			}
+		}while(!validPosition);
 	}
 }
