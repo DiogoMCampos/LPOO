@@ -7,7 +7,7 @@ public class MazeBuilder {
 
   char maze[][];
   boolean[][] mazeDone;
-  Stack<Point> mazeHistory;
+  Stack<Point> mazeHistory = new Stack<Point>();
   int mazeSize;
   Point currentPoint;
   Point currentPointBool;
@@ -56,7 +56,7 @@ public class MazeBuilder {
       do {
 
         do {
-          newDirection = rand.nextInt();
+          newDirection = rand.nextInt(4);
         } while (directions[newDirection]);
 
         directions[newDirection] = true;
