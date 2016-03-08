@@ -298,7 +298,7 @@ public class Maze
 						{'X', 'E', 'X', 'X', ' ', ' ', ' ', ' ', ' ', 'X'},
 						{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
 
-		MazeBuilder mb = new MazeBuilder(9);
+		MazeBuilder mb = new MazeBuilder(501);
 		
 		char [][] m3 = mb.getMaze();
 		

@@ -2,10 +2,12 @@ package maze.logic;
 
 import maze.cli.*;
 
+import java.util.EmptyStackException;
 import java.util.Random;
 import java.util.Stack;
 
-public class MazeBuilder {
+public class MazeBuilder 
+{
 
 	char maze[][];
 	boolean[][] mazeDone;
@@ -29,33 +31,33 @@ public class MazeBuilder {
 		this.mazeSize = size;
 		maze = new char[size][size];
 		mazeDone = new boolean[(size - 1) / 2][(size - 1) / 2];
-	
-	
-	
+
+
+
 		if (size % 2 == 0)
 		{
 			size++;
 		}
-	
+
 		for (int i = 0; i < size; i++)
 			for (int j = 0; j < size; j++)
 				maze[i][j] = 'X';
-	
-	
+
+
 		for (int i = 0; i < mazeDone.length; i++)
 			for (int j = 0; j < mazeDone.length; j++)
 				mazeDone[i][j] = false;
-	
+
 		// set exit and generate starting point
 		Point startingPoint = genStartingPoint();
-	
+
 		currentPoint = startingPoint;
 		currentPointBool = new Point((currentPoint.getX() - 1) / 2, (currentPoint.getY() - 1) / 2);
-	
+
 		mazeHistory.push(new Point(currentPointBool.getX(), currentPointBool.getY()));
-	
+
 		mazeDone[currentPointBool.getY()][currentPointBool.getX()] = true;
-	
+
 		while (!mazeHistory.empty())
 		{
 			boolean[] directions = new boolean[4];
@@ -63,7 +65,7 @@ public class MazeBuilder {
 			boolean missingTests = true;
 			int newDirection;
 			Random rand = new Random();
-	
+
 			//inter.print(maze);
 			//printSmallM();
 			do 
@@ -72,32 +74,32 @@ public class MazeBuilder {
 				{
 					newDirection = rand.nextInt(4);
 				} while (directions[newDirection]);
-	
+
 				directions[newDirection] = true;
-	
+
 				movementPossible = isMovementPossible(newDirection);
-	
+
 				missingTests = false;
 				for (int i = 0; i < 4; i++)
 					if (!directions[i])
 						missingTests = true;
-	
+
 			} while (!movementPossible && missingTests);
-	
-	
+
+
 			if (!movementPossible)
 			{
 				Point p = mazeHistory.pop();
 				currentPointBool = new Point(p.getX(), p.getY());
 				currentPoint.setX((currentPointBool.getX() * 2) + 1);
 				currentPoint.setY((currentPointBool.getY() * 2) + 1);
-	
+
 			}
 			else
 			{
 				int xMovement = 0;
 				int yMovement = 0;
-	
+
 				switch (newDirection) {
 				case 0:
 					xMovement = -1;
@@ -112,12 +114,12 @@ public class MazeBuilder {
 					yMovement = 1;
 					break;
 				}
-	
+
 				currentPointBool.setX(currentPointBool.getX() + xMovement);
 				currentPointBool.setY(currentPointBool.getY() + yMovement);
 				mazeDone[currentPointBool.getY()][currentPointBool.getX()] = true;
 				mazeHistory.push(new Point(currentPointBool.getX(), currentPointBool.getY()));
-	
+
 				currentPoint.setX(currentPoint.getX() + xMovement);
 				currentPoint.setY(currentPoint.getY() + yMovement);
 				maze[currentPoint.getY()][currentPoint.getX()] = ' ';
@@ -126,11 +128,10 @@ public class MazeBuilder {
 				maze[currentPoint.getY()][currentPoint.getX()] = ' ';
 			}
 		} while (!mazeHistory.empty());
-	
+
 		heroHistory = new boolean[mazeSize][mazeSize];
 		placeHero();
 		placeSword();
-		inter.print(maze);
 		placeDragon();
 	}
 
@@ -186,8 +187,8 @@ public class MazeBuilder {
 			System.out.println();
 		}
 	}
-	
-	
+
+
 	private Boolean isMovementPossible(int direction)
 	{
 		// TODO: Maybe replace with a switch statement
@@ -238,9 +239,10 @@ public class MazeBuilder {
 				validPosition = false;
 			else
 			{
-				validPosition = validDragonPlacement(hero.getX(),hero.getY());
 				maze[y][x] = 'D';
-				System.out.println("waiting for valid position");
+				validPosition = validDragonPlacement(hero.getX(),hero.getY());
+				if(!validPosition)
+					maze[y][x] = ' ';
 			}
 		}while(!validPosition);
 	}
@@ -283,26 +285,25 @@ public class MazeBuilder {
 				sword = new Point(x,y);
 			}
 		}while(!validPosition);
-		
+
 	}
 
 	private int movesAvaliable(int x, int y)
 	{
 		int count = 0;
-		System.out.println("up: " + maze[y - 1][x]);
-		System.out.println("down: " + maze[y + 1][x]);
-		System.out.println("left: " + maze[y][x - 1]);
-		System.out.println("right: " + maze[y][x + 1]);
-		if((maze[y - 1][x] == ' ' || maze[y - 1][x] == 'E') && !heroHistory[y-1][x])
-			count++;
-		if((maze[y][x + 1] == ' ' || maze[y][x + 1] == 'E') && !heroHistory[y][x+1])
-			count++;
-		if((maze[y + 1][x] == ' ' || maze[y + 1][x] == 'E') && !heroHistory[y+1][x])
-			count++;
-		if((maze[y][x - 1] == ' ' || maze[y][x - 1] == 'E') && !heroHistory[y][x-1])
-			count++;
+		if(y-1 >= 0)
+			if((maze[y - 1][x] == ' ' || maze[y - 1][x] == 'E') && !heroHistory[y-1][x])
+				count++;
+		if(x+1 < maze.length)
+			if((maze[y][x + 1] == ' ' || maze[y][x + 1] == 'E') && !heroHistory[y][x+1])
+				count++;
+		if(y+1 < maze.length)
+			if((maze[y + 1][x] == ' ' || maze[y + 1][x] == 'E') && !heroHistory[y+1][x])
+				count++;
+		if(x-1 >= 0)
+			if((maze[y][x - 1] == ' ' || maze[y][x - 1] == 'E') && !heroHistory[y][x-1])
+				count++;
 
-		System.out.println("count: " + count);
 		return count;
 	}
 
@@ -319,23 +320,31 @@ public class MazeBuilder {
 			dir = rand.nextInt(4);
 			if(dir == 0) //left
 			{
-				if((maze[y][x-1] == 'X' || maze[y][x-1] == 'D') && heroHistory[y][x-1])
+				if(maze[y][x-1] == 'X' || maze[y][x-1] == 'D' || heroHistory[y][x-1])
 					validMove = false;
+				else
+					validMove = true;
 			}
 			else if(dir == 1) //right
 			{
-				if((maze[y][x+1] == 'X' || maze[y][x+1] == 'D') && heroHistory[y][x+1])
+				if(maze[y][x+1] == 'X' || maze[y][x+1] == 'D' || heroHistory[y][x+1])
 					validMove = false;
+				else
+					validMove = true;
 			}
 			else if(dir == 2) //up
 			{
-				if((maze[y-1][x] == 'X' || maze[y-1][x] == 'D') && heroHistory[y-1][x])
+				if(maze[y-1][x] == 'X' || maze[y-1][x] == 'D' || heroHistory[y-1][x])
 					validMove = false;
+				else
+					validMove = true;
 			}
 			else if(dir == 3) // down
 			{
-				if((maze[y+1][x] == 'X' || maze[y+1][x] == 'D') && heroHistory[y+1][x])
+				if(maze[y+1][x] == 'X' || maze[y+1][x] == 'D' || heroHistory[y+1][x])
 					validMove = false;
+				else
+					validMove = true;
 			}
 		}while(!validMove);
 
@@ -359,7 +368,6 @@ public class MazeBuilder {
 			p.setY(y+1);
 			heroHistory[y+1][x] = true;
 		}
-		System.out.println("Move: " + dir);
 	}
 	private boolean validDragonPlacement(int x, int y)
 	{
@@ -367,42 +375,34 @@ public class MazeBuilder {
 		Point currentPoint = new Point(x,y);
 		boolean foundSword = false;
 
+		points.push(new Point(-1,-1));
 		points.push(new Point(x,y));
-		
-		System.out.println("X: " + x + " Y: " + y);
+
 		heroHistory[y][x] = true;
 
-		while(!points.empty() && !foundSword)
+		do
 		{
-			System.out.println("X: " + currentPoint.getX() + " Y: " + currentPoint.getY());
-			System.out.println("Stack top:   X: " + points.peek().getX() + " Y: " + points.peek().getY());
-		/*	if(points.peek().equals(new Point(-1,-1)) && currentPoint.equals(new Point(-1,-1)))
-			{
-			//	System.out.println("break");
-				break;
-			}*/
-		//	System.out.println("After break");
-			inter.print(maze);
-			printSmallM(heroHistory);
 			int moves = movesAvaliable(currentPoint.getX(), currentPoint.getY());
 			if(moves != 0)
 			{
-				System.out.println("moving");
-				points.push(new Point(currentPoint.getX(), currentPoint.getY()));
 				moveHero(currentPoint);
+				points.push(new Point(currentPoint.getX(), currentPoint.getY()));
 			}
 			else 
 			{
-				System.out.println("no moves");
-				currentPoint = points.pop();
+
+				Point p = points.pop();
+				currentPoint = new Point(p.getX(), p.getY());
 			}
 			
-			if(sword == currentPoint)
+			if(sword.equals(currentPoint))
 				foundSword = true;
-			
-			//System.out.println("X: " + currentPoint.getX() + " Y: " + currentPoint.getY());
-		}
+		}while(!points.empty() && !foundSword);
 
+		
+		heroHistory = new boolean[mazeSize][mazeSize];
+	//	inter.print(maze);
 		return foundSword;
+
 	}
 }
