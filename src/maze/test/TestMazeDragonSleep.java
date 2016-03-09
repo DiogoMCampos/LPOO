@@ -42,4 +42,26 @@ public class TestMazeDragonSleep
 		assertEquals(false, maze.getDragonLife());
 	}
 	
+	
+	@Test(timeout = 1000)
+	public void testRandomSleepDragon()
+	{
+		boolean sleep = false, noSleep = false;
+		Maze maze = new Maze(m1);
+		assertEquals(new Point(3, 3), maze.getDragonPosition());
+		assertEquals('D', maze.getDragonChar());
+		while(!sleep || !noSleep)
+		{
+			if(maze.sleepDragon() && !sleep)
+			{
+				sleep = true;
+				assertEquals('d', maze.getDragonChar());
+			}
+			else if(!noSleep)
+			{
+				noSleep = true;
+				assertEquals('D', maze.getDragonChar());
+			}
+		}
+	}
 }

@@ -110,5 +110,6 @@ public class TestMaze
 		maze.moveHero(3, -2);
 		assertEquals(false, maze.getFinished());
 	}
+	
 
 }
