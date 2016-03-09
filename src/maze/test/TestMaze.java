@@ -62,18 +62,18 @@ public class TestMaze
 	{
 		Maze maze = new Maze(m1);
 		ArrayList<Dragon> dragons = maze.getDragons();
-		for (int i = 0; i < dragons.size(); i++)
-		{
-			Dragon currentDragon = dragons.get(i);
-			assertEquals(new Point(3, 1), maze.getHeroPosition());
-			maze.moveHero(-2,0);
-			maze.moveHero(0, 2);
-			assertEquals(new Point(1, 3), maze.getHeroPosition());
-			assertEquals('A', maze.getHeroChar());
-			maze.moveHero(1, 0);
-			assertEquals(true, maze.getHeroLife());
-			assertEquals(false, currentDragon.getLife());
-		}
+		// If you add another dragon replace the index on "get" by it's index (the array is read from top to bottom and left to right)
+
+		Dragon currentDragon = dragons.get(0);
+		assertEquals(new Point(3, 1), maze.getHeroPosition());
+		maze.moveHero(-2,0);
+		maze.moveHero(0, 2);
+		assertEquals(new Point(1, 3), maze.getHeroPosition());
+		assertEquals('A', maze.getHeroChar());
+		maze.moveHero(1, 0);
+		assertEquals(true, maze.getHeroLife());
+		assertEquals(false, currentDragon.getLife());
+		// End copying here
 	}
 
 	// f)
@@ -82,21 +82,20 @@ public class TestMaze
 	{
 		Maze maze = new Maze(m1);
 		ArrayList<Dragon> dragons = maze.getDragons();
-		for (int i = 0; i < dragons.size(); i++)
-		{
-			Dragon currentDragon = dragons.get(i);
-			assertEquals(new Point(3, 1), maze.getHeroPosition());
-			maze.moveHero(-2,0);
-			maze.moveHero(0, 2);
-			assertEquals(new Point(1, 3), maze.getHeroPosition());
-			assertEquals('A', maze.getHeroChar());
-			maze.moveHero(1, 0);
-			assertEquals(true, maze.getHeroLife());
-			assertEquals(false, currentDragon.getLife());
-			maze.moveHero(1, -2);
-			maze.moveHero(1, 0);
-			assertEquals(true, maze.getFinished());
-		}
+
+		Dragon currentDragon = dragons.get(0);
+		assertEquals(new Point(3, 1), maze.getHeroPosition());
+		maze.moveHero(-2,0);
+		maze.moveHero(0, 2);
+		assertEquals(new Point(1, 3), maze.getHeroPosition());
+		assertEquals('A', maze.getHeroChar());
+		maze.moveHero(1, 0);
+		assertEquals(true, maze.getHeroLife());
+		assertEquals(false, currentDragon.getLife());
+		maze.moveHero(1, -2);
+		maze.moveHero(1, 0);
+		assertEquals(true, maze.getFinished());
+		// End copying here
 	}
 
 	// g)
@@ -123,6 +122,6 @@ public class TestMaze
 		maze.moveHero(3, -2);
 		assertEquals(false, maze.getFinished());
 	}
-	
+
 
 }
