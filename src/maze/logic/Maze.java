@@ -119,7 +119,7 @@ public class Maze
 		}
 	}
 
-	public void sleepDragon()
+	public boolean sleepDragon()
 	{
 		Random rand = new Random();
 		int sleep = rand.nextInt(3);
@@ -142,6 +142,8 @@ public class Maze
 		int dragonX = fm.getX();
 		int dragonY = fm.getY();
 		matrix[dragonY][dragonX] = fm.getChar();
+		
+		return fm.getSleep();
 	}
 	
 	public void setDragonSleep(boolean state)
@@ -281,24 +283,7 @@ public class Maze
 
 	public static void main(String[] args) 
 	{
-		char [][] m1 = {{'X', 'X', 'X', 'X', 'X'},
-						{'X', ' ', ' ', 'H', 'S'},
-						{'X', ' ', 'X', ' ', 'X'},
-						{'X', 'E', ' ', 'D', 'X'},
-						{'X', 'X', 'X', 'X', 'X'}};
-		
-		char [][] m2 = {{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-						{'X', 'H', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'},
-						{'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
-						{'X', 'D', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
-						{'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
-						{'X', ' ', ' ', ' ', ' ', ' ', ' ', 'X', ' ', 'S'},
-						{'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
-						{'X', ' ', 'X', 'X', ' ', 'X', ' ', 'X', ' ', 'X'},
-						{'X', 'E', 'X', 'X', ' ', ' ', ' ', ' ', ' ', 'X'},
-						{'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'}};
-
-		MazeBuilder mb = new MazeBuilder(501);
+		MazeBuilder mb = new MazeBuilder(8);
 		
 		char [][] m3 = mb.getMaze();
 		

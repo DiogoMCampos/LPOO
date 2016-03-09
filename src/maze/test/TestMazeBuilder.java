@@ -101,12 +101,12 @@ public class TestMazeBuilder {
 		visit(m, i-1, j, visited);
 		visit(m, i+1, j, visited);
 		visit(m, i, j-1, visited);
-		visit(m, i, j+1, visited);
-	}
+			visit(m, i, j+1, visited);
+		}
 	
 	@Test
 	public void testRandomMazeGenerator() throws IllegalArgumentException {
-		int numMazes = 1; // number of mazes to generate and test
+		int numMazes = 1000; // number of mazes to generate and test
 		int maxMazeSize = 101; // can change to any odd number >= 5
 		int minMazeSize = 5;
 		
