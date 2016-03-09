@@ -1,5 +1,8 @@
 package maze.test;
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
 import org.junit.Test;
 import maze.logic.*;
 
@@ -58,14 +61,19 @@ public class TestMaze
 	public void testHeroKillsDragon() 
 	{
 		Maze maze = new Maze(m1);
-		assertEquals(new Point(3, 1), maze.getHeroPosition());
-		maze.moveHero(-2,0);
-		maze.moveHero(0, 2);
-		assertEquals(new Point(1, 3), maze.getHeroPosition());
-		assertEquals('A', maze.getHeroChar());
-		maze.moveHero(1, 0);
-		assertEquals(true, maze.getHeroLife());
-		assertEquals(false, maze.getDragonLife());
+		ArrayList<Dragon> dragons = maze.getDragons();
+		for (int i = 0; i < dragons.size(); i++)
+		{
+			Dragon currentDragon = dragons.get(i);
+			assertEquals(new Point(3, 1), maze.getHeroPosition());
+			maze.moveHero(-2,0);
+			maze.moveHero(0, 2);
+			assertEquals(new Point(1, 3), maze.getHeroPosition());
+			assertEquals('A', maze.getHeroChar());
+			maze.moveHero(1, 0);
+			assertEquals(true, maze.getHeroLife());
+			assertEquals(false, currentDragon.getLife());
+		}
 	}
 
 	// f)
@@ -73,17 +81,22 @@ public class TestMaze
 	public void testWinGame() 
 	{
 		Maze maze = new Maze(m1);
-		assertEquals(new Point(3, 1), maze.getHeroPosition());
-		maze.moveHero(-2,0);
-		maze.moveHero(0, 2);
-		assertEquals(new Point(1, 3), maze.getHeroPosition());
-		assertEquals('A', maze.getHeroChar());
-		maze.moveHero(1, 0);
-		assertEquals(true, maze.getHeroLife());
-		assertEquals(false, maze.getDragonLife());
-		maze.moveHero(1, -2);
-		maze.moveHero(1, 0);
-		assertEquals(true, maze.getFinished());
+		ArrayList<Dragon> dragons = maze.getDragons();
+		for (int i = 0; i < dragons.size(); i++)
+		{
+			Dragon currentDragon = dragons.get(i);
+			assertEquals(new Point(3, 1), maze.getHeroPosition());
+			maze.moveHero(-2,0);
+			maze.moveHero(0, 2);
+			assertEquals(new Point(1, 3), maze.getHeroPosition());
+			assertEquals('A', maze.getHeroChar());
+			maze.moveHero(1, 0);
+			assertEquals(true, maze.getHeroLife());
+			assertEquals(false, currentDragon.getLife());
+			maze.moveHero(1, -2);
+			maze.moveHero(1, 0);
+			assertEquals(true, maze.getFinished());
+		}
 	}
 
 	// g)

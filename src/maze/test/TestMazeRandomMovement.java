@@ -1,6 +1,9 @@
 package maze.test;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
 import org.junit.Test;
 import maze.logic.*;
 
@@ -16,30 +19,40 @@ public class TestMazeRandomMovement
 	public void testDragonMovement() 
 	{
 		Maze maze = new Maze(m1);
-		assertEquals(new Point(3, 3), maze.getDragonPosition());
-		maze.moveDragon();
-		assertNotEquals(new Point(3,3), maze.getDragonPosition());
+		ArrayList<Dragon> dragons = maze.getDragons();
+		for (int i = 0; i < dragons.size(); i++)
+		{
+			Dragon currentDragon = dragons.get(i);
+			assertEquals(new Point(3, 3), currentDragon.getPosition());
+			maze.moveDragon(currentDragon);
+			assertNotEquals(new Point(3,3), currentDragon.getPosition());
+		}
 	}
 	
 	@Test(timeout = 1000)
 	public void testDecideMove()
 	{
-		boolean move = false, noMove = false;
 		Maze maze = new Maze(m1);
-		assertEquals(new Point(3, 3), maze.getDragonPosition());
-		while(!move || !noMove)
+		ArrayList<Dragon> dragons = maze.getDragons();
+		for (int i = 0; i < dragons.size(); i++)
 		{
-			if(maze.decideMove() && !move)
+			Dragon currentDragon = dragons.get(i);
+			boolean move = false, noMove = false;
+			assertEquals(new Point(3, 3), currentDragon.getPosition());
+			while(!move || !noMove)
 			{
-				move = true;
-				maze.moveDragon();
-				assertNotEquals(new Point(3,3), maze.getDragonPosition());	
-			}
-			else if (!noMove)
-			{
-				noMove = true;
-				Point p = maze.getDragonPosition();
-				assertEquals(p, maze.getDragonPosition());
+				if(maze.decideMove() && !move)
+				{
+					move = true;
+					maze.moveDragon(currentDragon);
+					assertNotEquals(new Point(3,3), currentDragon.getPosition());	
+				}
+				else if (!noMove)
+				{
+					noMove = true;
+					Point p = currentDragon.getPosition();
+					assertEquals(p, currentDragon.getPosition());
+				}
 			}
 		}
 	}

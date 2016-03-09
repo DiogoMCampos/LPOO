@@ -1,5 +1,6 @@
 package maze.logic;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import maze.cli.*;
@@ -9,7 +10,7 @@ public class Maze
 	Interface textInterface = new Interface();
 	char matrix[][] = new char[10][10];
 	Hero sirWilliam = new Hero();
-	Dragon fm = new Dragon();
+	ArrayList<Dragon> dragons = new ArrayList<Dragon>();
 	boolean finished = false;
 	int mode;
 
@@ -29,54 +30,71 @@ public class Maze
 				if (matrix[i][j] == 'H')
 					sirWilliam = new Hero(j, i);
 				else if (matrix[i][j] == 'D')
-					fm = new Dragon(j, i);
+				{
+					Dragon newDragon = new Dragon(j, i);
+					dragons.add(newDragon);
+				}
 			}
 		}
+	}
+	
+	public ArrayList<Dragon> getDragons()
+	{
+		return dragons;
 	}
 
 	public Point getHeroPosition() 
 	{
 		return sirWilliam.getPosition();
 	}
-
+/*
 	public Point getDragonPosition()
 	{
 		return fm.getPosition();
-	}
+	}*/
 
 	public char getHeroChar()
 	{
 		return sirWilliam.getChar();
 	}
-	
+	/*
 	public char getDragonChar()
 	{
 		return fm.getChar();
-	}
+	}*/
 
 	public boolean getHeroLife()
 	{
 		return sirWilliam.getLife();
 	}
-
+/*
 	public boolean getDragonLife()
 	{
 		return fm.getLife();
+	} */
+	
+	public boolean allDragonsDead() 
+	{
+		for (int i = 0; i < dragons.size(); i++)
+		{
+			if (dragons.get(i).getLife())
+				return false;
+		}
+		
+		return true;
 	}
 
 	public void moveHero(int dx, int dy) 
 	{
 		int newX = sirWilliam.getX() + dx;
 		int newY = sirWilliam.getY() + dy;
-		int dragonX = fm.getX();
-		int dragonY = fm.getY();
 
 		if (matrix[newY][newX] == 'X')
 			return;
 
 		if (matrix[newY][newX] == 'S')
 		{
-			if (!fm.life)
+			if (allDragonsDead())
 			{
 				this.finished = true;
 				updateHeroPosition(newX, newY);
@@ -97,58 +115,60 @@ public class Maze
 
 		updateHeroPosition(newX, newY);
 
-		if (sirWilliam.isAdjacent(fm) && fm.getLife())
+		for (int i = 0; i < dragons.size(); i++) 
 		{
-			if (!sirWilliam.getSword() && !fm.getSleep())
+			Dragon currentDragon = dragons.get(i);
+			int dragonX = currentDragon.getX();
+			int dragonY = currentDragon.getY();
+			
+			if (sirWilliam.isAdjacent(currentDragon) && currentDragon.getLife())
 			{
-				sirWilliam.dies();
-				int sY = sirWilliam.getY();
-				int sX = sirWilliam.getX();
-				matrix[sY][sX] = ' ';
-				textInterface.msgHeroDied();
-				this.finished = true;
-				return;
-			}
+				if (!sirWilliam.getSword() && !currentDragon.getSleep())
+				{
+					sirWilliam.dies();
+					int sY = sirWilliam.getY();
+					int sX = sirWilliam.getX();
+					matrix[sY][sX] = ' ';
+					textInterface.msgHeroDied();
+					this.finished = true;
+					return;
+				}
 
-			else if(sirWilliam.getSword())
-			{
-				fm.dies();
-				matrix[dragonY][dragonX] = ' ';
-				textInterface.msgDragonDies();
+				else if(sirWilliam.getSword())
+				{
+					currentDragon.dies();
+					matrix[dragonY][dragonX] = ' ';
+					textInterface.msgDragonDies();
+				}
 			}
 		}
 	}
 
-	public boolean sleepDragon()
+	public boolean sleepDragon(Dragon dragon)
 	{
 		Random rand = new Random();
 		int sleep = rand.nextInt(3);
 
 		if(sleep == 0) // change status
 		{
-			if(fm.getSleep())
+			if(dragon.getSleep())
 			{	
-				setDragonSleep(false);
+				dragon.setSleep(false);
 				textInterface.msgDragonAwake();
 			}
 			else
 			{
-				setDragonSleep(true);
+				dragon.setSleep(true);
 				textInterface.msgDragonSleep();
 			}
 		}
 
 
-		int dragonX = fm.getX();
-		int dragonY = fm.getY();
-		matrix[dragonY][dragonX] = fm.getChar();
+		int dragonX = dragon.getX();
+		int dragonY = dragon.getY();
+		matrix[dragonY][dragonX] = dragon.getChar();
 		
-		return fm.getSleep();
-	}
-	
-	public void setDragonSleep(boolean state)
-	{
-		fm.setSleep(state);
+		return dragon.getSleep();
 	}
 
 	public boolean decideMove()
@@ -161,12 +181,12 @@ public class Maze
 		else
 			return true;
 	}
-	public void moveDragon()
+	public void moveDragon(Dragon dragon)
 	{
 		int dx = 0;
 		int dy = 0;
-		int dragonX = fm.getX();
-		int dragonY = fm.getY();
+		int dragonX = dragon.getX();
+		int dragonY = dragon.getY();
 
 		boolean validMovement = true;
 
@@ -204,27 +224,27 @@ public class Maze
 			matrix[dragonY][dragonX] = ' ';
 			matrix[dragonY + dy][dragonX + dx] = 'F';
 
-			fm.setX(dragonX + dx);
-			fm.setY(dragonY + dy);
+			dragon.setX(dragonX + dx);
+			dragon.setY(dragonY + dy);
 			return;
 		}
 
 		if(matrix[dragonY + dy][dragonX + dx] == ' ' && matrix[dragonY][dragonX] == 'F')
 		{
 			matrix[dragonY][dragonX] = 'E';
-			matrix[dragonY + dy][dragonX + dx] = fm.getChar();
+			matrix[dragonY + dy][dragonX + dx] = dragon.getChar();
 
-			fm.setX(dragonX + dx);
-			fm.setY(dragonY + dy);
+			dragon.setX(dragonX + dx);
+			dragon.setY(dragonY + dy);
 			return;
 		}
 
 		matrix[dragonY][dragonX] = ' ';
 
-		fm.setX(dragonX + dx);
-		fm.setY(dragonY + dy);
+		dragon.setX(dragonX + dx);
+		dragon.setY(dragonY + dy);
 
-		matrix[dragonY + dy][dragonX + dx] = fm.getChar();
+		matrix[dragonY + dy][dragonX + dx] = dragon.getChar();
 
 	}
 
@@ -244,11 +264,16 @@ public class Maze
 	public void updateGame()
 	{
 		if(mode == 3)
-			sleepDragon();
-
-		if(!fm.getSleep() && (mode == 2 || mode == 3) && decideMove())
-			moveDragon();
-
+			for (int i = 0; i < dragons.size(); i++)
+				sleepDragon(dragons.get(i));
+			
+		for (int i = 0; i < dragons.size(); i++)
+		{
+			Dragon currentDragon = dragons.get(i);
+			if(!currentDragon.getSleep() && mode != 1 && decideMove())
+				moveDragon(currentDragon);
+		}
+		
 		int movement = textInterface.readInput();
 
 		if (movement == 0)
@@ -283,7 +308,7 @@ public class Maze
 
 	public static void main(String[] args) 
 	{
-		MazeBuilder mb = new MazeBuilder(8);
+		MazeBuilder mb = new MazeBuilder(7);
 		
 		char [][] m3 = mb.getMaze();
 		
