@@ -6,17 +6,17 @@ import java.util.Stack;
 public class MazeBuilder 
 {
 	char maze[][];
-	
+
 	boolean[][] mazeDone;
 	Stack<Point> mazeHistory = new Stack<Point>();
 	int mazeSize;
 	Point currentPoint;
 	Point currentPointBool;
-	
+
 	Point sword;
 	Point hero;
 	boolean[][] heroHistory;
-	
+
 	public char[][] getMaze()
 	{
 		return maze;
@@ -25,7 +25,7 @@ public class MazeBuilder
 	public MazeBuilder(int size)
 	{
 		initializeMazeBuilder(size);
-		
+
 		// set exit and generate starting point
 		Point startingPoint = genStartingPoint();
 
@@ -56,11 +56,11 @@ public class MazeBuilder
 				movementPossible = isMovementPossible(newDirection);
 
 				missingTests = false;
-				
+
 				for (int i = 0; i < 4; i++)
 					if (!directions[i])
 						missingTests = true;
-				
+
 			} while (!movementPossible && missingTests);
 
 
@@ -68,15 +68,16 @@ public class MazeBuilder
 				backtrackMaze();
 			else
 				updateMazeGenerator(newDirection);
-			
 		} while (!mazeHistory.empty());
 
 		heroHistory = new boolean[mazeSize][mazeSize];
+		int numDragons = genNumberDragons();
 		placeHero();
 		placeSword();
-		placeDragon();
+		for(int i = 0; i < numDragons; i++)
+			placeDragon();
 	}
-	
+
 	private void initializeMazeBuilder(int size) 
 	{
 		size = (size % 2 == 0) ? ++size : size;
@@ -100,7 +101,7 @@ public class MazeBuilder
 		int genLimit = (mazeSize - 1) / 2;
 		int index = ((rand.nextInt(genLimit) + 1) * 2) - 1;
 		Point startingPoint = new Point();
-		
+
 		switch (genSide) {
 		case 0: // left side
 			maze[0][index] = 'S';
@@ -163,7 +164,7 @@ public class MazeBuilder
 			return !mazeDone[currentPointBool.getY() + 1][currentPointBool.getX()];
 		}
 	}
-	
+
 	private void backtrackMaze()
 	{
 		Point p = mazeHistory.pop();
@@ -171,7 +172,7 @@ public class MazeBuilder
 		currentPoint.setX((currentPointBool.getX() * 2) + 1);
 		currentPoint.setY((currentPointBool.getY() * 2) + 1);
 	}
-	
+
 	private void updateMazeGenerator(int newDirection) 
 	{
 		int xMovement = 0;
@@ -346,7 +347,7 @@ public class MazeBuilder
 			break;
 		}
 	}
-	
+
 	private boolean validDragonPlacement(int x, int y)
 	{
 		Stack<Point> points = new Stack<Point>();
@@ -372,14 +373,40 @@ public class MazeBuilder
 				Point p = points.pop();
 				currentPoint = new Point(p.getX(), p.getY());
 			}
-			
+
 			if(sword.equals(currentPoint))
 				foundSword = true;
 		}while(!points.empty() && !foundSword);
 
-		
+
 		heroHistory = new boolean[mazeSize][mazeSize];
 		return foundSword;
 
+	}
+	private int genNumberDragons()
+	{
+		int freeSpaces = 7 * mazeSize - 35;
+
+		Random rand = new Random();
+
+		int maxNumberDragons = freeSpaces/7;
+
+		int denom = maxNumberDragons*(maxNumberDragons + 1) / 2;
+
+		//Probabilidade de sairam i dragoes = (nmaxdragoes - i + 1)/(n*(n+1)/2)
+
+		int ran = rand.nextInt(denom) + 1;
+							
+		int numDragons = 0;
+
+		while (ran > 0) 
+		{
+			ran -= maxNumberDragons;
+			maxNumberDragons--;
+			numDragons++;
+		}
+
+
+		return numDragons;
 	}
 }

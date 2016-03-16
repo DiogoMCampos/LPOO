@@ -308,7 +308,7 @@ public class Maze
 
 	public static void main(String[] args) 
 	{
-		MazeBuilder mb = new MazeBuilder(7);
+		MazeBuilder mb = new MazeBuilder(17);
 		
 		char [][] m3 = mb.getMaze();
 		
