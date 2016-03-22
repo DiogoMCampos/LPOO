@@ -110,7 +110,7 @@ public class TestMazeBuilder {
 		int maxMazeSize = 101; // can change to any odd number >= 5
 		int minMazeSize = 5;
 		
-		MazeBuilder builder = new MazeBuilder(maxMazeSize);
+		MazeBuilder builder = new MazeBuilder(maxMazeSize, 1);
 		char[][] badWalls = {
 				{'X', 'X', 'X'},
 				{'X', 'X', 'X'},

@@ -38,6 +38,11 @@ public class Maze
 		}
 	}
 	
+	public char[][] getMaze()
+	{
+		return matrix;
+	}
+	
 	public ArrayList<Dragon> getDragons()
 	{
 		return dragons;
@@ -308,7 +313,7 @@ public class Maze
 
 	public static void main(String[] args) 
 	{
-		MazeBuilder mb = new MazeBuilder(17);
+		MazeBuilder mb = new MazeBuilder(17, 0);
 		
 		char [][] m3 = mb.getMaze();
 		

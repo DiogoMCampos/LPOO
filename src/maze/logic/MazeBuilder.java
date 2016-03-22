@@ -22,7 +22,7 @@ public class MazeBuilder
 		return maze;
 	}
 
-	public MazeBuilder(int size)
+	public MazeBuilder(int size, int nDragons)
 	{
 		initializeMazeBuilder(size);
 
@@ -71,7 +71,11 @@ public class MazeBuilder
 		} while (!mazeHistory.empty());
 
 		heroHistory = new boolean[mazeSize][mazeSize];
-		int numDragons = genNumberDragons();
+		int numDragons;
+		if(nDragons == 0)
+			numDragons = genNumberDragons();
+		else
+			numDragons = nDragons;
 		placeHero();
 		placeSword();
 		for(int i = 0; i < numDragons; i++)
@@ -396,7 +400,7 @@ public class MazeBuilder
 		//Probabilidade de sairam i dragoes = (nmaxdragoes - i + 1)/(n*(n+1)/2)
 
 		int ran = rand.nextInt(denom) + 1;
-							
+
 		int numDragons = 0;
 
 		while (ran > 0) 
