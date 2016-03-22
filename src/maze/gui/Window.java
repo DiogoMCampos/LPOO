@@ -4,9 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
+import javax.swing.JRootPane;
+
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -16,12 +17,14 @@ import maze.logic.MazeBuilder;
 import java.awt.Font;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Window {
 
@@ -126,6 +129,7 @@ public class Window {
 		textArea.setBounds(54, 168, 260, 260);
 		frame.getContentPane().add(textArea);
 
+		JRootPane rootPane = frame.getRootPane();
 
 		JButton btnNewButton = new JButton("Exit Game");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -149,22 +153,6 @@ public class Window {
 				textArea.setText(printable);
 			}
 		});
-		btnUp.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode() == KeyEvent.VK_UP)
-					btnUp.doClick();
-			}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-			}
-		});
 		btnUp.setBounds(395, 254, 70, 23);
 		frame.getContentPane().add(btnUp);
 
@@ -176,22 +164,6 @@ public class Window {
 				maze.moveHero(-1, 0);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
-			}
-		});
-		btnLeft.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode() == KeyEvent.VK_LEFT)
-					btnLeft.doClick();
-			}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
 			}
 		});
 		btnLeft.setBounds(358, 288, 70, 23);
@@ -207,21 +179,6 @@ public class Window {
 				textArea.setText(printable);
 			}
 		});
-		btnRight.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode() == KeyEvent.VK_RIGHT)
-					btnRight.doClick();
-			}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-			}
-		});
 		btnRight.setBounds(439, 288, 70, 23);
 		frame.getContentPane().add(btnRight);
 
@@ -235,29 +192,59 @@ public class Window {
 				textArea.setText(printable);
 			}
 		});
-		btnDown.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode() == KeyEvent.VK_DOWN)
-					btnDown.doClick();
-			}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-			}
-		});
 		btnDown.setBounds(395, 322, 70, 23);
 		frame.getContentPane().add(btnDown);
+
+		Action upKeyAction = new AbstractAction("upKeyAction") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("oi");
+				btnUp.doClick();
+			} 
+		};
+
+		Action downKeyAction = new AbstractAction("downKeyAction") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnDown.doClick();
+			}
+		};
+		
+		Action rightKeyAction = new AbstractAction("rightKeyAction") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnRight.doClick();
+			} 
+		};
+
+		Action leftKeyAction = new AbstractAction("leftKeyAction") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnLeft.doClick();
+			}
+		};
+
+		KeyStroke upKeyStroke = KeyStroke.getKeyStroke("UP");
+		KeyStroke downKeyStroke = KeyStroke.getKeyStroke("DOWN");
+		KeyStroke rightKeyStroke = KeyStroke.getKeyStroke("RIGHT");
+		KeyStroke leftKeyStroke = KeyStroke.getKeyStroke("LEFT");
+		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(upKeyStroke, "upKeyAction");
+		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(downKeyStroke, "downKeyAction");
+		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(rightKeyStroke, "rightKeyAction");
+		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(leftKeyStroke, "leftKeyAction");
+		rootPane.getActionMap().put("upKeyAction", upKeyAction);
+		rootPane.getActionMap().put("downKeyAction", downKeyAction);
+		rootPane.getActionMap().put("rightKeyAction", rightKeyAction);
+		rootPane.getActionMap().put("leftKeyAction", leftKeyAction);
 
 		JLabel lblNewLabel_1 = new JLabel("New label");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(54, 432, 260, 25);
 		frame.getContentPane().add(lblNewLabel_1);
-
 
 		JButton btnNewMaze = new JButton("New Maze");
 		btnNewMaze.addActionListener(new ActionListener() {
@@ -283,7 +270,7 @@ public class Window {
 				{
 					numberDragons = 0;
 				}
-				
+
 				textArea.setEditable(true);
 				btnUp.setEnabled(true);
 				btnLeft.setEnabled(true);
