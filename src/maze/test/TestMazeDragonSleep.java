@@ -18,7 +18,7 @@ public class TestMazeDragonSleep
 	{
 		Maze maze = new Maze(m1);
 		ArrayList<Dragon> dragons = maze.getDragons();		
-		
+
 		// If you add another dragon replace the index on "get" by it's index (the array is read from top to bottom and left to right)
 		Dragon currentDragon = dragons.get(0);
 		assertEquals(new Point(3, 3), currentDragon.getPosition());
@@ -31,55 +31,55 @@ public class TestMazeDragonSleep
 		currentDragon.setSleep(false);
 		assertEquals('D', currentDragon.getChar());
 		// End copying here
-	
-}
 
-@Test
-public void testKillSleepDragon() 
-{
-	Maze maze = new Maze(m1);
-	ArrayList<Dragon> dragons = maze.getDragons();
-
-	// If you add another dragon replace the index on "get" by it's index (the array is read from top to bottom and left to right)
-	Dragon currentDragon = dragons.get(0);
-	assertEquals(new Point(3, 3), currentDragon.getPosition());
-	assertEquals(new Point(3, 1), maze.getHeroPosition());
-	currentDragon.setSleep(true);
-	assertEquals('d', currentDragon.getChar());
-	maze.moveHero(-2, 2);
-	assertEquals(new Point(1, 3), maze.getHeroPosition());
-	assertEquals('A', maze.getHeroChar());
-	maze.moveHero(1, 0);
-	assertEquals(false, currentDragon.getLife());
-	// End copying here
-}
-
-
-@Test(timeout = 1000)
-public void testRandomSleepDragon()
-{
-	Maze maze = new Maze(m1);
-	ArrayList<Dragon> dragons = maze.getDragons();
-
-	// If you add another dragon replace the index on "get" by it's index (the array is read from top to bottom and left to right)
-	Dragon currentDragon = dragons.get(0);
-	boolean sleep = false, noSleep = false;
-	assertEquals(new Point(3, 3), currentDragon.getPosition());
-	assertEquals('D', currentDragon.getChar());
-	while(!sleep || !noSleep)
-	{
-		if(maze.sleepDragon(currentDragon) && !sleep)
-		{
-			sleep = true;
-			assertEquals('d', currentDragon.getChar());
-		}
-		else if(!noSleep)
-		{
-			noSleep = true;
-			assertEquals('D', currentDragon.getChar());
-		}
 	}
-	// Stop copying here
 
-}
+	@Test
+	public void testKillSleepDragon() 
+	{
+		Maze maze = new Maze(m1);
+		ArrayList<Dragon> dragons = maze.getDragons();
+
+		// If you add another dragon replace the index on "get" by it's index (the array is read from top to bottom and left to right)
+		Dragon currentDragon = dragons.get(0);
+		assertEquals(new Point(3, 3), currentDragon.getPosition());
+		assertEquals(new Point(3, 1), maze.getHeroPosition());
+		currentDragon.setSleep(true);
+		assertEquals('d', currentDragon.getChar());
+		maze.moveHero(-2, 2);
+		assertEquals(new Point(1, 3), maze.getHeroPosition());
+		assertEquals('A', maze.getHeroChar());
+		maze.moveHero(1, 0);
+		assertEquals(false, currentDragon.getLife());
+		// End copying here
+	}
+
+
+	@Test(timeout = 1000)
+	public void testRandomSleepDragon()
+	{
+		Maze maze = new Maze(m1);
+		ArrayList<Dragon> dragons = maze.getDragons();
+
+		// If you add another dragon replace the index on "get" by it's index (the array is read from top to bottom and left to right)
+		Dragon currentDragon = dragons.get(0);
+		boolean sleep = false, noSleep = false;
+		assertEquals(new Point(3, 3), currentDragon.getPosition());
+		assertEquals('D', currentDragon.getChar());
+		while(!sleep || !noSleep)
+		{
+			if(maze.sleepDragon(currentDragon) && !sleep)
+			{
+				sleep = true;
+				assertEquals('d', currentDragon.getChar());
+			}
+			else if(!maze.sleepDragon(currentDragon) && !noSleep)
+			{
+				noSleep = true;
+				assertEquals('D', currentDragon.getChar());
+			}
+		}
+		// Stop copying here
+
+	}
 }
