@@ -31,6 +31,11 @@ public class Window {
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JButton btnUp;
+	private JButton btnLeft;
+	private JButton btnRight;
+	private JButton btnDown;
+	private JLabel status;
 	private Maze maze;
 	private GraphicInterface gi = new GraphicInterface();
 	private int mazeSize = 11;
@@ -143,53 +148,73 @@ public class Window {
 		frame.getContentPane().add(btnNewButton);
 
 
-		JButton btnUp = new JButton("Up");
+		btnUp = new JButton("Up");
 		btnUp.setEnabled(false);
 		btnUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				maze.moveHero(0, -1);
+				maze.updateGame(0);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
+				if(maze.getFinished())
+				{
+					closeInputs();
+					status.setText("You won the game");
+				}
 			}
 		});
 		btnUp.setBounds(395, 254, 70, 23);
 		frame.getContentPane().add(btnUp);
 
-		JButton btnLeft = new JButton("Left");
+		btnLeft = new JButton("Left");
 		btnLeft.setEnabled(false);
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				maze.moveHero(-1, 0);
+				maze.updateGame(1);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
+				if(maze.getFinished())
+				{
+					closeInputs(); 
+					status.setText("You won the game");
+				}
 			}
 		});
 		btnLeft.setBounds(358, 288, 70, 23);
 		frame.getContentPane().add(btnLeft);
 
-		JButton btnRight = new JButton("Right");
+		btnRight = new JButton("Right");
 		btnRight.setEnabled(false);
 		btnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				maze.moveHero(1, 0);
+				maze.updateGame(3);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
+				if(maze.getFinished())
+				{
+					closeInputs();
+					status.setText("You won the game");
+				}
 			}
 		});
 		btnRight.setBounds(439, 288, 70, 23);
 		frame.getContentPane().add(btnRight);
 
-		JButton btnDown = new JButton("Down");
+		btnDown = new JButton("Down");
 		btnDown.setEnabled(false);
 		btnDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				maze.moveHero(0, 1);
+				maze.updateGame(2);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
+				if(maze.getFinished())
+				{
+					closeInputs();
+					status.setText("You won the game");
+				}
 			}
 		});
 		btnDown.setBounds(395, 322, 70, 23);
@@ -241,10 +266,10 @@ public class Window {
 		rootPane.getActionMap().put("rightKeyAction", rightKeyAction);
 		rootPane.getActionMap().put("leftKeyAction", leftKeyAction);
 
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(54, 432, 260, 25);
-		frame.getContentPane().add(lblNewLabel_1);
+		status = new JLabel("Status");
+		status.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		status.setBounds(54, 432, 260, 25);
+		frame.getContentPane().add(status);
 
 		JButton btnNewMaze = new JButton("New Maze");
 		btnNewMaze.addActionListener(new ActionListener() {
@@ -279,7 +304,12 @@ public class Window {
 
 				MazeBuilder mb = new MazeBuilder(mazeSize, numberDragons);
 				char [][] matrix = mb.getMaze();
+				status.setText("New Game");
 				maze = new Maze(matrix);
+				
+				int mode = comboBox.getSelectedIndex();
+				maze.setMode(mode);
+				System.out.println(mode);
 
 				String printable = gi.print(matrix);
 				textArea.setText(printable);
@@ -290,4 +320,14 @@ public class Window {
 		frame.getContentPane().add(btnNewMaze);
 
 	}
+	
+	
+	public void closeInputs()
+	{
+		btnRight.setEnabled(false);
+		btnLeft.setEnabled(false);
+		btnUp.setEnabled(false);
+		btnDown.setEnabled(false);
+	}
+	
 }

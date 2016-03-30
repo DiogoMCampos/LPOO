@@ -62,21 +62,16 @@ public class Maze
 	{
 		return sirWilliam.getChar();
 	}
-	/*
-	public char getDragonChar()
-	{
-		return fm.getChar();
-	}*/
 
 	public boolean getHeroLife()
 	{
 		return sirWilliam.getLife();
 	}
-/*
-	public boolean getDragonLife()
+
+	public void setMode(int mode)
 	{
-		return fm.getLife();
-	} */
+		this.mode = mode;
+	}
 	
 	public boolean allDragonsDead() 
 	{
@@ -128,6 +123,7 @@ public class Maze
 			
 			if (sirWilliam.isAdjacent(currentDragon) && currentDragon.getLife())
 			{
+				System.out.println("Near dragon");
 				if (!sirWilliam.getSword() && !currentDragon.getSleep())
 				{
 					sirWilliam.dies();
@@ -141,6 +137,7 @@ public class Maze
 
 				else if(sirWilliam.getSword())
 				{
+					System.out.println("Dead");
 					currentDragon.dies();
 					matrix[dragonY][dragonX] = ' ';
 					textInterface.msgDragonDies();
@@ -265,21 +262,30 @@ public class Maze
 
 		matrix[newY][newX] = sirWilliam.getChar();
 	}
+	
+	public void interUpdateGame() {
+		int movement = textInterface.readInput();
+		
+		updateGame(movement);
+	}
 
-	public void updateGame()
+	public void updateGame(int movement)
 	{
-		if(mode == 3)
-			for (int i = 0; i < dragons.size(); i++)
-				sleepDragon(dragons.get(i));
+		System.out.println("Maze: " + mode);
 			
 		for (int i = 0; i < dragons.size(); i++)
 		{
 			Dragon currentDragon = dragons.get(i);
-			if(!currentDragon.getSleep() && mode != 1 && decideMove())
-				moveDragon(currentDragon);
+			if (currentDragon.getLife())
+			{
+				if (mode == 2)
+					sleepDragon(currentDragon);
+				if(!currentDragon.getSleep() && mode != 0 && decideMove())
+					moveDragon(currentDragon);
+			}
 		}
 		
-		int movement = textInterface.readInput();
+		
 
 		if (movement == 0)
 			moveHero(0, -1);
@@ -295,13 +301,13 @@ public class Maze
 
 	public void playGame()
 	{
-		this.mode = textInterface.chooseMode();
+		this.mode = textInterface.chooseMode() - 1;
 
 		textInterface.print(this.matrix);
 
 		while(!getFinished())
 		{
-			updateGame();
+			interUpdateGame();
 		}
 
 	}
