@@ -47,16 +47,23 @@ public class Maze
 	{
 		return dragons;
 	}
+	
+	public int dragonsAlive()
+	{
+		int num = 0;
+		for(int i = 0; i < dragons.size(); i++)
+		{
+			if(dragons.get(i).getLife())
+				num++;
+		}
+		
+		return num;
+	}
 
 	public Point getHeroPosition() 
 	{
 		return sirWilliam.getPosition();
 	}
-/*
-	public Point getDragonPosition()
-	{
-		return fm.getPosition();
-	}*/
 
 	public char getHeroChar()
 	{
@@ -73,16 +80,6 @@ public class Maze
 		this.mode = mode;
 	}
 	
-	public boolean allDragonsDead() 
-	{
-		for (int i = 0; i < dragons.size(); i++)
-		{
-			if (dragons.get(i).getLife())
-				return false;
-		}
-		
-		return true;
-	}
 
 	public void moveHero(int dx, int dy) 
 	{
@@ -94,13 +91,13 @@ public class Maze
 
 		if (matrix[newY][newX] == 'S')
 		{
-			if (allDragonsDead())
+			if (dragonsAlive() == 0)
 			{
 				this.finished = true;
 				updateHeroPosition(newX, newY);
 				textInterface.msgWinGame();
 			}
-
+			
 			return;
 		}
 
@@ -218,8 +215,6 @@ public class Maze
 			
 		}while(!validMovement);
 
-
-	
 
 		if(matrix[dragonY + dy][dragonX + dx] == 'E')
 		{

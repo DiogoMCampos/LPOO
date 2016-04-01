@@ -36,10 +36,17 @@ public class Window {
 	private JButton btnRight;
 	private JButton btnDown;
 	private JLabel status;
+	private JComboBox<String> comboBox;
+	private JRootPane rootPane;
+	private KeyStroke upKeyStroke;
+	private KeyStroke downKeyStroke;
+	private KeyStroke rightKeyStroke;
+	private KeyStroke leftKeyStroke;
 	private Maze maze;
 	private GraphicInterface gi = new GraphicInterface();
 	private int mazeSize = 11;
 	private int numberDragons = 1;
+	
 
 	/**
 	 * Launch the application.
@@ -74,6 +81,8 @@ public class Window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
+		initializeRootPane();
+		
 		JLabel lblMazeSize = new JLabel("Maze Size");
 		lblMazeSize.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblMazeSize.setBounds(54, 35, 67, 26);
@@ -118,7 +127,7 @@ public class Window {
 		lblNewLabel.setBounds(54, 131, 97, 26);
 		frame.getContentPane().add(lblNewLabel);
 
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox<String>();
 		comboBox.setToolTipText("Select the desired dragon behaviour");
 		comboBox.setMaximumRowCount(3);
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -134,7 +143,7 @@ public class Window {
 		textArea.setBounds(54, 168, 260, 260);
 		frame.getContentPane().add(textArea);
 
-		JRootPane rootPane = frame.getRootPane();
+		
 
 		JButton btnNewButton = new JButton("Exit Game");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -156,10 +165,24 @@ public class Window {
 				maze.updateGame(0);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
+				int dragonsAlive = maze.dragonsAlive();
+
 				if(maze.getFinished())
 				{
 					closeInputs();
-					status.setText("You won the game");
+					if(dragonsAlive == 0)
+						status.setText("You won the game");
+					else
+						status.setText("You were killed!");
+				}
+				else
+				{
+					if(dragonsAlive == 1)
+						status.setText("Move the hero. " +  dragonsAlive + " dragon to go.");
+					else if(dragonsAlive == 0)
+						status.setText("Move to the exit. ");
+					else
+						status.setText("Move the hero. " +  dragonsAlive + " dragons to go.");
 				}
 			}
 		});
@@ -174,10 +197,25 @@ public class Window {
 				maze.updateGame(1);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
+				int dragonsAlive = maze.dragonsAlive();
+
 				if(maze.getFinished())
 				{
-					closeInputs(); 
-					status.setText("You won the game");
+					closeInputs();
+					if(dragonsAlive == 0)
+						status.setText("You won the game");
+					else
+						status.setText("You were killed!");
+				}
+				else
+				{
+
+					if(dragonsAlive == 1)
+						status.setText("Move the hero. " +  dragonsAlive + " dragon to go.");
+					else if(dragonsAlive == 0)
+						status.setText("Move to the exit. ");
+					else
+						status.setText("Move the hero. " +  dragonsAlive + " dragons to go.");
 				}
 			}
 		});
@@ -192,10 +230,24 @@ public class Window {
 				maze.updateGame(3);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
+				int dragonsAlive = maze.dragonsAlive();
 				if(maze.getFinished())
 				{
 					closeInputs();
-					status.setText("You won the game");
+					if(dragonsAlive == 0)
+						status.setText("You won the game");
+					else
+						status.setText("You were killed!");
+				}
+				else
+				{
+
+					if(dragonsAlive == 1)
+						status.setText("Move the hero. " +  dragonsAlive + " dragon to go.");
+					else if(dragonsAlive == 0)
+						status.setText("Move to the exit. ");
+					else
+						status.setText("Move the hero. " +  dragonsAlive + " dragons to go.");
 				}
 			}
 		});
@@ -210,63 +262,34 @@ public class Window {
 				maze.updateGame(2);
 				String printable = gi.print(maze.getMaze());
 				textArea.setText(printable);
+
+				int dragonsAlive = maze.dragonsAlive();
 				if(maze.getFinished())
 				{
 					closeInputs();
-					status.setText("You won the game");
+					if(dragonsAlive == 0)
+						status.setText("You won the game");
+					else
+						status.setText("You were killed!");
+				}
+				else
+				{
+
+					if(dragonsAlive == 1)
+						status.setText("Move the hero. " +  dragonsAlive + " dragon to go.");
+					else if(dragonsAlive == 0)
+						status.setText("Move to the exit. ");
+					else
+						status.setText("Move the hero. " +  dragonsAlive + " dragons to go.");
 				}
 			}
 		});
 		btnDown.setBounds(395, 322, 70, 23);
 		frame.getContentPane().add(btnDown);
 
-		Action upKeyAction = new AbstractAction("upKeyAction") {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("oi");
-				btnUp.doClick();
-			} 
-		};
-
-		Action downKeyAction = new AbstractAction("downKeyAction") {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnDown.doClick();
-			}
-		};
 		
-		Action rightKeyAction = new AbstractAction("rightKeyAction") {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnRight.doClick();
-			} 
-		};
-
-		Action leftKeyAction = new AbstractAction("leftKeyAction") {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnLeft.doClick();
-			}
-		};
-
-		KeyStroke upKeyStroke = KeyStroke.getKeyStroke("UP");
-		KeyStroke downKeyStroke = KeyStroke.getKeyStroke("DOWN");
-		KeyStroke rightKeyStroke = KeyStroke.getKeyStroke("RIGHT");
-		KeyStroke leftKeyStroke = KeyStroke.getKeyStroke("LEFT");
-		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(upKeyStroke, "upKeyAction");
-		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(downKeyStroke, "downKeyAction");
-		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(rightKeyStroke, "rightKeyAction");
-		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(leftKeyStroke, "leftKeyAction");
-		rootPane.getActionMap().put("upKeyAction", upKeyAction);
-		rootPane.getActionMap().put("downKeyAction", downKeyAction);
-		rootPane.getActionMap().put("rightKeyAction", rightKeyAction);
-		rootPane.getActionMap().put("leftKeyAction", leftKeyAction);
-
-		status = new JLabel("Status");
+		status = new JLabel("Create a new maze to play.");
 		status.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		status.setBounds(54, 432, 260, 25);
 		frame.getContentPane().add(status);
@@ -293,7 +316,7 @@ public class Window {
 				numberDragons = Integer.parseInt(inputDragons);
 				if(numberDragons < 0 || checkBox.isSelected())
 				{
-					numberDragons = 0;
+					numberDragons = 0;	
 				}
 
 				textArea.setEditable(true);
@@ -304,9 +327,10 @@ public class Window {
 
 				MazeBuilder mb = new MazeBuilder(mazeSize, numberDragons);
 				char [][] matrix = mb.getMaze();
-				status.setText("New Game");
 				maze = new Maze(matrix);
-				
+
+				status.setText("Move the hero to pick the sword.");
+
 				int mode = comboBox.getSelectedIndex();
 				maze.setMode(mode);
 				System.out.println(mode);
@@ -320,8 +344,8 @@ public class Window {
 		frame.getContentPane().add(btnNewMaze);
 
 	}
-	
-	
+
+
 	public void closeInputs()
 	{
 		btnRight.setEnabled(false);
@@ -330,4 +354,55 @@ public class Window {
 		btnDown.setEnabled(false);
 	}
 	
+	public void initializeRootPane()
+	{
+		rootPane = frame.getRootPane();
+		
+		Action upKeyAction = new AbstractAction("upKeyAction") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnUp.doClick();
+			} 
+		};
+
+		Action downKeyAction = new AbstractAction("downKeyAction") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnDown.doClick();
+			}
+		};
+
+		Action rightKeyAction = new AbstractAction("rightKeyAction") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnRight.doClick();
+			} 
+		};
+
+		Action leftKeyAction = new AbstractAction("leftKeyAction") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnLeft.doClick();
+			}
+		};
+
+		upKeyStroke = KeyStroke.getKeyStroke("UP");
+		downKeyStroke = KeyStroke.getKeyStroke("DOWN");
+		rightKeyStroke = KeyStroke.getKeyStroke("RIGHT");
+		leftKeyStroke = KeyStroke.getKeyStroke("LEFT");
+		
+		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(upKeyStroke, "upKeyAction");
+		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(downKeyStroke, "downKeyAction");
+		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(rightKeyStroke, "rightKeyAction");
+		rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(leftKeyStroke, "leftKeyAction");
+		rootPane.getActionMap().put("upKeyAction", upKeyAction);
+		rootPane.getActionMap().put("downKeyAction", downKeyAction);
+		rootPane.getActionMap().put("rightKeyAction", rightKeyAction);
+		rootPane.getActionMap().put("leftKeyAction", leftKeyAction);
+	}
+
 }
