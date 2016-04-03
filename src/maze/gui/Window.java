@@ -59,11 +59,10 @@ public class Window {
 	private GraphicInterface gi = new GraphicInterface();
 	private int mazeSize = 11;
 	private int numberDragons = 1;
-	
-	private JCheckBox cbBuilder;
 	private JCheckBox graphicMazeSel;
 	private GraphicMaze GM;
 	private boolean graphicMode;
+	private JButton btnOpenMazeBuilder;
 
 
 	/**
@@ -114,6 +113,11 @@ public class Window {
 		status.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		status.setBounds(54, 432, 260, 25);
 		frame.getContentPane().add(status);
+		
+		btnOpenMazeBuilder = new JButton("Open Maze Builder");
+		btnOpenMazeBuilder.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnOpenMazeBuilder.setBounds(376, 176, 146, 23);
+		frame.getContentPane().add(btnOpenMazeBuilder);
 	}
 
 	public void closeInputs()
@@ -239,12 +243,6 @@ public class Window {
 		graphicMazeSel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		graphicMazeSel.setBounds(397, 135, 107, 23);
 		frame.getContentPane().add(graphicMazeSel);
-		
-		// Initializes the CheckBox related to the graphical mode builder
-		cbBuilder = new JCheckBox("Builder");
-		cbBuilder.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		cbBuilder.setBounds(290, 37, 97, 23);
-		frame.getContentPane().add(cbBuilder);
 	}
 	
 	public void initializeButtons() {
@@ -301,6 +299,8 @@ public class Window {
 				
 				if(graphicMode)
 				{
+					if(GM != null)
+						GM.closeWindow();
 					if(mazeSize > maxHeight)
 					{
 						mazeSize = maxHeight;
@@ -310,7 +310,7 @@ public class Window {
 						matrix = mb.getMaze();
 						maze = new Maze(matrix);
 					}
-					GM = new GraphicMaze(maze, frame.getLocationOnScreen().x, cbBuilder.isSelected());
+					GM = new GraphicMaze(maze, frame.getLocationOnScreen().x);
 				}
 
 				status.setText("Move the hero to pick the sword.");

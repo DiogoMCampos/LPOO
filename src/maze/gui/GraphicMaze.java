@@ -20,17 +20,17 @@ public class GraphicMaze {
 	private MazePanel panel;
 	private Maze maze;
 	private int x, y;
-	private boolean buildMode;
+	//private boolean buildMode;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GraphicMaze(Maze maze, int x, boolean buildMode) {
+	public GraphicMaze(Maze maze, int x) {
 		this.size = maze.getMaze().length + 1;
 		this.maze = maze;
 		this.x = x;
-		this.buildMode = buildMode;
+		//this.buildMode = buildMode;
 		initialize();
 	}
 
@@ -90,4 +90,8 @@ public class GraphicMaze {
 		MazeFrame.repaint();
 	}
 
+	public void closeWindow()
+	{
+		MazeFrame.dispose();
+	}
 }
