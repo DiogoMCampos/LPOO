@@ -28,6 +28,8 @@ import javax.swing.JTextArea;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Window {
 
@@ -113,11 +115,6 @@ public class Window {
 		status.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		status.setBounds(54, 432, 260, 25);
 		frame.getContentPane().add(status);
-		
-		btnOpenMazeBuilder = new JButton("Open Maze Builder");
-		btnOpenMazeBuilder.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnOpenMazeBuilder.setBounds(376, 176, 146, 23);
-		frame.getContentPane().add(btnOpenMazeBuilder);
 	}
 
 	public void closeInputs()
@@ -243,6 +240,12 @@ public class Window {
 		graphicMazeSel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		graphicMazeSel.setBounds(397, 135, 107, 23);
 		frame.getContentPane().add(graphicMazeSel);
+		
+		// Initializes the button that opens the Maze Builder
+		btnOpenMazeBuilder = new JButton("Open Maze Builder");
+		btnOpenMazeBuilder.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnOpenMazeBuilder.setBounds(376, 176, 146, 23);
+		frame.getContentPane().add(btnOpenMazeBuilder);
 	}
 	
 	public void initializeButtons() {
@@ -311,6 +314,30 @@ public class Window {
 						maze = new Maze(matrix);
 					}
 					GM = new GraphicMaze(maze, frame.getLocationOnScreen().x);
+					
+					GM.getFrame().addKeyListener(new KeyListener() {
+	                    @Override
+	                    public void keyPressed(KeyEvent e) {
+	                    	int key = e.getKeyCode();
+
+	        				if (key == KeyEvent.VK_RIGHT)
+	        					btnRight.doClick();
+	        				else if (key == KeyEvent.VK_DOWN)
+	        					btnDown.doClick();
+	        				else if (key == KeyEvent.VK_LEFT)
+	        					btnLeft.doClick();
+	        				else if (key == KeyEvent.VK_UP)
+	        					btnUp.doClick();
+	                    }
+
+						@Override
+						public void keyReleased(KeyEvent arg0) {
+						}
+
+						@Override
+						public void keyTyped(KeyEvent arg0) {
+						}
+	                });
 				}
 
 				status.setText("Move the hero to pick the sword.");

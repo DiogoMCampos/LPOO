@@ -348,7 +348,7 @@ public class MazeBuilder
 	/**
 	 * Moves the hero to a new position
 	 * 
-	 * @param p the position of the hero
+	 * @param p the position of the hero	
 	 */
 	private void moveHero(Point p)
 	{

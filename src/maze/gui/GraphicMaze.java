@@ -94,4 +94,9 @@ public class GraphicMaze {
 	{
 		MazeFrame.dispose();
 	}
+	
+	public JFrame getFrame()
+	{
+		return MazeFrame;
+	}
 }
