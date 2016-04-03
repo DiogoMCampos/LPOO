@@ -20,15 +20,17 @@ public class GraphicMaze {
 	private MazePanel panel;
 	private Maze maze;
 	private int x, y;
+	private boolean buildMode;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GraphicMaze(Maze maze, int x) {
+	public GraphicMaze(Maze maze, int x, boolean buildMode) {
 		this.size = maze.getMaze().length + 1;
 		this.maze = maze;
 		this.x = x;
+		this.buildMode = buildMode;
 		initialize();
 	}
 

@@ -17,11 +17,25 @@ public class MazeBuilder
 	Point hero;
 	boolean[][] heroHistory;
 
+	/**
+	 * Returns the maze created by the MazeBuilder object
+	 * 
+	 * @return the maze created by the MazeBuilder object
+	 */
 	public char[][] getMaze()
 	{
 		return maze;
 	}
-
+	
+	/**
+	 * 
+	 * MazeBuilder constructor 
+	 * Randomly generates a maze given it's size (side length) and number of dragons.
+	 * In the event that nDragons is 0, the number of dragons is randomly generated.
+	 * 
+	 * @param size the size of the maze to generate
+	 * @param nDragons the number of dragons to place in the maze
+	 */
 	public MazeBuilder(int size, int nDragons)
 	{
 		initializeMazeBuilder(size);
@@ -81,6 +95,12 @@ public class MazeBuilder
 		for(int i = 0; i < numDragons; i++)
 			placeDragon();
 	}
+	
+	/**
+	 * Initializes the MazeBuilder attributes
+	 * 
+	 * @param size the size of the maze to generate
+	 */
 
 	private void initializeMazeBuilder(int size) 
 	{
@@ -97,7 +117,12 @@ public class MazeBuilder
 			for (int j = 0; j < mazeDone.length; j++)
 				mazeDone[i][j] = false;
 	}
-
+	
+	/**
+	 * Generates the exit point and the point where the maze generation starts
+	 * 
+	 * @return the starting point for the maze generation
+	 */
 	private Point genStartingPoint()
 	{
 		Random rand = new Random();
@@ -133,7 +158,13 @@ public class MazeBuilder
 
 		return startingPoint;
 	}
-
+	
+	/**
+	 * Verifies if the desired point has been visited or not by the maze generation tool
+	 * 
+	 * @param direction the direction to check the possibility of movement
+	 * @return true if it hasn't been visited and false otherwise
+	 */
 	private Boolean isMovementPossible(int direction)
 	{
 		if (direction == 0) // left
@@ -168,7 +199,10 @@ public class MazeBuilder
 			return !mazeDone[currentPointBool.getY() + 1][currentPointBool.getX()];
 		}
 	}
-
+	
+	/**
+	 * Pops the last position visited from the stack and returns the currentPoint to that position
+	 */
 	private void backtrackMaze()
 	{
 		Point p = mazeHistory.pop();
@@ -176,7 +210,12 @@ public class MazeBuilder
 		currentPoint.setX((currentPointBool.getX() * 2) + 1);
 		currentPoint.setY((currentPointBool.getY() * 2) + 1);
 	}
-
+	
+	/**
+	 * Uses the newDirection to move to the new position and mark it as visited.
+	 * 
+	 * @param newDirection the direction to generate the next blank place in the maze
+	 */
 	private void updateMazeGenerator(int newDirection) 
 	{
 		int xMovement = 0;
@@ -209,7 +248,10 @@ public class MazeBuilder
 		currentPoint.setY(currentPoint.getY() + yMovement);
 		maze[currentPoint.getY()][currentPoint.getX()] = ' ';
 	}
-
+	
+	/**
+	 * Places the dragon in a random position in the maze
+	 */
 	private void placeDragon()
 	{		
 		Random rand = new Random();
@@ -230,7 +272,10 @@ public class MazeBuilder
 			}
 		}while(!validPosition);
 	}
-
+	
+	/**
+	 * Places the hero in a random position in the maze
+	 */
 	private void placeHero()
 	{		
 		Random rand = new Random();
@@ -250,7 +295,10 @@ public class MazeBuilder
 			}
 		}while(!validPosition);
 	}
-
+	
+	/**
+	 * Places the sword in a random position in the maze
+	 */
 	private void placeSword()
 	{		
 		Random rand = new Random();
@@ -271,7 +319,13 @@ public class MazeBuilder
 		}while(!validPosition);
 
 	}
-
+	
+	/**
+	 * Gets the number of moves available to the hero in the position given by x and y
+	 * @param x
+	 * @param y
+	 * @return the number of moves available to the hero
+	 */
 	private int movesAvaliable(int x, int y)
 	{
 		int count = 0;
@@ -290,7 +344,12 @@ public class MazeBuilder
 
 		return count;
 	}
-
+	
+	/**
+	 * Moves the hero to a new position
+	 * 
+	 * @param p the position of the hero
+	 */
 	private void moveHero(Point p)
 	{
 		Random rand = new Random();
@@ -351,7 +410,14 @@ public class MazeBuilder
 			break;
 		}
 	}
-
+	
+	/**
+	 * Checks if it's possible to place a dragon in the position given by x and y
+	 * 
+	 * @param x
+	 * @param y
+	 * @return True if it's valid and False otherwise
+	 */
 	private boolean validDragonPlacement(int x, int y)
 	{
 		Stack<Point> points = new Stack<Point>();
@@ -387,6 +453,11 @@ public class MazeBuilder
 		return foundSword;
 
 	}
+	
+	/**
+	 * Generates the number of dragons to place in the maze
+	 * @return the number of dragons to place in the maze
+	 */
 	private int genNumberDragons()
 	{
 		int freeSpaces = 7 * mazeSize - 35;

@@ -60,6 +60,7 @@ public class Window {
 	private int mazeSize = 11;
 	private int numberDragons = 1;
 	
+	private JCheckBox cbBuilder;
 	private JCheckBox graphicMazeSel;
 	private GraphicMaze GM;
 	private boolean graphicMode;
@@ -204,7 +205,7 @@ public class Window {
 		// Initializes the random number of Dragons checkbox
 		randomDragons = new JCheckBox("Random");
 		randomDragons.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		randomDragons.setBounds(290, 87, 97, 23);
+		randomDragons.setBounds(290, 85, 97, 23);
 		randomDragons.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent) 
@@ -233,11 +234,17 @@ public class Window {
 		cbDragonMode.addItem("Random movement and sleep");
 		frame.getContentPane().add(cbDragonMode);
 		
-		// Initializes the CheckBox related to graphical Mode
+		// Initializes the CheckBox related to the graphical mode
 		graphicMazeSel = new JCheckBox("Graphic Maze");
 		graphicMazeSel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		graphicMazeSel.setBounds(397, 135, 107, 23);
 		frame.getContentPane().add(graphicMazeSel);
+		
+		// Initializes the CheckBox related to the graphical mode builder
+		cbBuilder = new JCheckBox("Builder");
+		cbBuilder.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cbBuilder.setBounds(290, 37, 97, 23);
+		frame.getContentPane().add(cbBuilder);
 	}
 	
 	public void initializeButtons() {
@@ -303,7 +310,7 @@ public class Window {
 						matrix = mb.getMaze();
 						maze = new Maze(matrix);
 					}
-					GM = new GraphicMaze(maze, frame.getLocationOnScreen().x);
+					GM = new GraphicMaze(maze, frame.getLocationOnScreen().x, cbBuilder.isSelected());
 				}
 
 				status.setText("Move the hero to pick the sword.");
@@ -398,7 +405,6 @@ public class Window {
 		}
 		else
 		{
-
 			if(dragonsAlive == 1)
 				status.setText("Move the hero. " +  dragonsAlive + " dragon to go.");
 			else if(dragonsAlive == 0)
