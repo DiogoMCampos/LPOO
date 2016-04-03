@@ -14,11 +14,19 @@ public class Maze
 	boolean finished = false;
 	int mode;
 
+	/**
+	 * Returns the status of the game
+	 * @return true if finished, false otherwise
+	 */
 	public boolean getFinished()
 	{
 		return finished;
 	}
 
+	/**
+	 * Initializes the Maze by reading a matrix
+	 * @param matrix the matrix in which the maze is based
+	 */
 	public Maze(char[][] matrix)
 	{
 		this.matrix = matrix;
@@ -38,16 +46,28 @@ public class Maze
 		}
 	}
 	
+	/**
+	 * Returns the maze
+	 * @return the maze in a bidimensional array
+	 */
 	public char[][] getMaze()
 	{
 		return matrix;
 	}
 	
+	/**
+	 * Returns the list of the dragons contained in the maze
+	 * @return an ArrayList containing the dragons
+	 */
 	public ArrayList<Dragon> getDragons()
 	{
 		return dragons;
 	}
 	
+	/**
+	 * Returns the number of dragons alive
+	 * @return the number of dragons alive
+	 */
 	public int dragonsAlive()
 	{
 		int num = 0;
@@ -60,27 +80,48 @@ public class Maze
 		return num;
 	}
 
+	/**
+	 * Returns the hero position
+	 * @return the Point where the Hero is located
+	 */
 	public Point getHeroPosition() 
 	{
 		return hero.getPosition();
 	}
 
+	/**
+	 * Returns the Hero's char
+	 * @return the Hero's char
+	 */
 	public char getHeroChar()
 	{
 		return hero.getChar();
 	}
 
+	/**
+	 * Returns the hero's life
+	 * @return true if hero's alive, false otherwise
+	 */
 	public boolean getHeroLife()
 	{
 		return hero.getLife();
 	}
 
+	/**
+	 * Sets the game mode
+	 * @param mode the mode to set
+	 */
 	public void setMode(int mode)
 	{
 		this.mode = mode;
 	}
 	
-
+	/**
+	 * Moves the hero according to the parameters and checks if there are any 
+	 * changes such as hero picking the sword, if the hero reached the exit
+	 * @param dx the displacement on x axis
+	 * @param dy the displacement on y axis
+	 */
 	public void moveHero(int dx, int dy) 
 	{
 		int newX = hero.getX() + dx;
@@ -117,6 +158,9 @@ public class Maze
 		}
 	}
 	
+	/**
+	 * Checks and handles if there are any collisions between dragons and the hero
+	 */
 	public void heroDragonCollisions(Dragon currentDragon) 
 	{
 		int dragonX = currentDragon.getX();
@@ -148,6 +192,11 @@ public class Maze
 		}
 	}
 
+	/**
+	 * Changes the dragon sleep status with a probability of 1/3
+	 * @param dragon the dragon to change sleep status
+	 * @return the new sleep status of the dragon
+	 */
 	public boolean sleepDragon(Dragon dragon)
 	{
 		Random rand = new Random();
@@ -175,6 +224,11 @@ public class Maze
 		return dragon.getSleep();
 	}
 
+	/**
+	 * Decides if a dragon will move or not
+	 * The probability of moving is 4/5 and the probability of not moving is 1/5
+	 * @return the X position of the character
+	 */
 	public boolean decideMove()
 	{
 		Random rand = new Random();
@@ -186,6 +240,10 @@ public class Maze
 			return true;
 	}
 	
+	/**
+	 * Moves a dragon and handles collisions with the sword
+	 * @param dragon the dragon that will move
+	 */
 	public void moveDragon(Dragon dragon)
 	{
 		int dx = 0;
@@ -253,6 +311,11 @@ public class Maze
 
 	}
 
+	/**
+	 * Clears the actual position where the dragon is and fills the new one
+	 * @param newX the new X of the hero
+	 * @param newY the new Y of the hero
+	 */
 	public void updateHeroPosition(int newX, int newY)
 	{
 		int oldX = hero.getX();
@@ -266,15 +329,23 @@ public class Maze
 		matrix[newY][newX] = hero.getChar();
 	}
 	
+	/**
+	 * Reads user input from the text Interface and
+	 * updates the game accordingly and prints the updated matrix
+	 */
 	public void interUpdateGame() {
 		int movement = textInterface.readInput();
 		updateGame(movement);
 		textInterface.print(matrix);
 	}
 
+	/**
+	 * Coordinates the game by moving the dragons, changing their sleep state
+	 * and moving the hero using the parameter received
+	 * @param movement code received by readInput
+	 */
 	public void updateGame(int movement)
 	{	
-		
 		for (int i = 0; i < dragons.size(); i++)
 		{
 			Dragon currentDragon = dragons.get(i);
@@ -297,6 +368,9 @@ public class Maze
 			moveHero(1, 0);
 	}
 
+	/**
+	 * Reads the game mode, prints the matrix and asks for inputs
+	 */
 	public void playGame()
 	{
 		this.mode = textInterface.chooseMode() - 1;
@@ -310,6 +384,9 @@ public class Maze
 
 	}
 
+	/**
+	 * Ends the textInterface used
+	 */
 	public void endInterface()
 	{
 		textInterface.finalize();
