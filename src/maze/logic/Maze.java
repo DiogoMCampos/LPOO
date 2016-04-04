@@ -7,12 +7,12 @@ import maze.cli.*;
 
 public class Maze
 {
-	Interface textInterface = new Interface();
-	char matrix[][] = new char[10][10];
-	Hero hero = new Hero();
-	ArrayList<Dragon> dragons = new ArrayList<Dragon>();
-	boolean finished = false;
-	int mode;
+	private Interface textInterface = new Interface();
+	private char matrix[][] = new char[10][10];
+	private Hero hero = new Hero();
+	private ArrayList<Dragon> dragons = new ArrayList<Dragon>();
+	private boolean finished = false;
+	private int mode;
 
 	/**
 	 * Returns the status of the game
@@ -38,6 +38,22 @@ public class Maze
 				if (matrix[i][j] == 'H')
 					hero = new Hero(j, i);
 				else if (matrix[i][j] == 'D')
+				{
+					Dragon newDragon = new Dragon(j, i);
+					dragons.add(newDragon);
+				}
+				else if (matrix[i][j] == 'A') 
+				{
+					hero = new Hero(j, i);
+					hero.setSword();
+				}
+				else if (matrix[i][j] == 'd')
+				{
+					Dragon newDragon = new Dragon(j, i);
+					newDragon.setSleep(true);
+					dragons.add(newDragon);
+				}
+				else if (matrix[i][j] == 'F')
 				{
 					Dragon newDragon = new Dragon(j, i);
 					dragons.add(newDragon);
@@ -403,6 +419,10 @@ public class Maze
 		myMaze.playGame();
 
 		myMaze.endInterface();
+	}
+
+	public Hero getHero() {
+		return hero;
 	}
 
 }

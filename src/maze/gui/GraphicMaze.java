@@ -1,9 +1,9 @@
 package maze.gui;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Point;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import maze.logic.Maze;
+import maze.logic.Point;
 import maze.gui.MazePanel;
 
 
@@ -27,6 +28,11 @@ public class GraphicMaze {
 	private int x, y;
 	private boolean buildMode;
 	private int windowX, windowY;
+	
+	private boolean isCharSelected;
+	private char charSelected = 'N';
+	private Point positionSelected;
+	
 
 
 	/**
@@ -104,18 +110,32 @@ public class GraphicMaze {
 					int x = e.getX() / 50;
 					int y = e.getY() / 50;
 					if (x < size - 1) {
-						if (maze.getMaze()[y][x] == 'H')
-							System.out.println("Hero selected");
-						if (maze.getMaze()[y][x] == 'D')
-							System.out.println("Dragon selected");
-						if (maze.getMaze()[y][x] == 'E')
-							System.out.println("Sword selected");
-						if (maze.getMaze()[y][x] == 'S')
-							System.out.println("Exit selected");
-						if (maze.getMaze()[y][x] == ' ')
-							System.out.println("Empty space selected");
-						if (maze.getMaze()[y][x] == 'X')
-							System.out.println("Wall selected");
+						if (charSelected == 'N') {
+							if (maze.getMaze()[y][x] == 'H') {
+								charSelected = maze.getHeroChar();
+								positionSelected = maze.getHeroPosition();
+							}
+							if (maze.getMaze()[y][x] == 'D')
+								System.out.println("Dragon selected");
+							if (maze.getMaze()[y][x] == 'E')
+								System.out.println("Sword selected");
+							if (maze.getMaze()[y][x] == 'S')
+								System.out.println("Exit selected");
+							if (maze.getMaze()[y][x] == ' ')
+								System.out.println("Empty space selected");
+							if (maze.getMaze()[y][x] == 'X')
+								System.out.println("Wall selected");
+						}
+						else {
+							if (maze.getMaze()[y][x] == ' ') {
+								maze.getMaze()[positionSelected.getY()][positionSelected.getX()] = ' ';
+								maze.getMaze()[y][x] = charSelected;
+								maze.getHero().setX(x);
+								maze.getHero().setY(y);
+								charSelected = 'N';
+							}
+							updatePanel();
+						}
 					}
 				}
 			}
