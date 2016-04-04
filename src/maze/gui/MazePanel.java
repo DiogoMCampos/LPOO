@@ -65,25 +65,25 @@ public class MazePanel extends JPanel {
 			for(int j = 0; j < maze.length; j++)
 			{
 				if(maze[i][j] == 'X')
-					g.drawImage(wall, x, y, x + width - 1, y + height - 1, 0, 0, wall.getWidth(), wall.getHeight(), null);
+					g.drawImage(wall, x, y, x + width, y + height, 0, 0, wall.getWidth(), wall.getHeight(), null);
 				else if(maze[i][j] == ' ')
-					g.drawImage(floor, x, y, x + width - 1, y + height - 1, 0, 0, floor.getWidth(), floor.getHeight(), null);
+					g.drawImage(floor, x, y, x + width, y + height, 0, 0, floor.getWidth(), floor.getHeight(), null);
 				else if(maze[i][j] == 'H')
-					g.drawImage(unarmedHero, x, y, x + width - 1, y + height - 1, 0, 0, unarmedHero.getWidth(), unarmedHero.getHeight(), null);
+					g.drawImage(unarmedHero, x, y, x + width, y + height, 0, 0, unarmedHero.getWidth(), unarmedHero.getHeight(), null);
 				else if(maze[i][j] == 'A')
-					g.drawImage(armedHero, x, y, x + width - 1, y + height - 1, 0, 0, armedHero.getWidth(), armedHero.getHeight(), null);
+					g.drawImage(armedHero, x, y, x + width, y + height, 0, 0, armedHero.getWidth(), armedHero.getHeight(), null);
 				else if(maze[i][j] == 'D')
-					g.drawImage(dragon, x, y, x + width - 1, y + height - 1, 0, 0, dragon.getWidth(), dragon.getHeight(), null);
+					g.drawImage(dragon, x, y, x + width, y + height, 0, 0, dragon.getWidth(), dragon.getHeight(), null);
 				else if(maze[i][j] == 'd')
-					g.drawImage(sleepyDragon, x, y, x + width - 1, y + height - 1, 0, 0, sleepyDragon.getWidth(), sleepyDragon.getHeight(), null);
+					g.drawImage(sleepyDragon, x, y, x + width, y + height, 0, 0, sleepyDragon.getWidth(), sleepyDragon.getHeight(), null);
 				else if(maze[i][j] == 'F')
-					g.drawImage(armedDragon, x, y, x + width - 1, y + height - 1, 0, 0, armedDragon.getWidth(), armedDragon.getHeight(), null);
+					g.drawImage(armedDragon, x, y, x + width, y + height, 0, 0, armedDragon.getWidth(), armedDragon.getHeight(), null);
 				else if(maze[i][j] == 'E')
-					g.drawImage(sword, x, y, x + width - 1, y + height - 1, 0, 0, sword.getWidth(), sword.getHeight(), null);
+					g.drawImage(sword, x, y, x + width, y + height, 0, 0, sword.getWidth(), sword.getHeight(), null);
 				else if(maze[i][j] == 'S' && numDragonsAlive != 0)
-					g.drawImage(closedDoor, x, y, x + width - 1, y + height - 1, 0, 0, closedDoor.getWidth(), closedDoor.getHeight(), null);
+					g.drawImage(closedDoor, x, y, x + width, y + height, 0, 0, closedDoor.getWidth(), closedDoor.getHeight(), null);
 				else if(maze[i][j] == 'S' && numDragonsAlive == 0)
-					g.drawImage(openDoor, x, y, x + width - 1, y + height - 1, 0, 0, openDoor.getWidth(), openDoor.getHeight(), null);
+					g.drawImage(openDoor, x, y, x + width, y + height, 0, 0, openDoor.getWidth(), openDoor.getHeight(), null);
 				x += width;
 			}
 			y += height;

@@ -173,6 +173,7 @@ public class Window {
 					maze = new Maze(fio.getMaze());
 					mazeArea.setText(gi.print(maze.getMaze()));
 					setInputs(true);
+					initializeGame(false, maze);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -191,6 +192,7 @@ public class Window {
 					maze = new Maze(fio.getMaze());
 					mazeArea.setText(gi.print(maze.getMaze()));
 					setInputs(true);
+					initializeGame(false, maze);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -209,6 +211,7 @@ public class Window {
 					maze = new Maze(fio.getMaze());
 					mazeArea.setText(gi.print(maze.getMaze()));
 					setInputs(true);
+					initializeGame(false, maze);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -483,6 +486,9 @@ public class Window {
 	}
 
 	public void updateMovement(int direction) {
+		if (graphicMode && GM.getBuildMode())
+			return;
+		
 		maze.updateGame(direction);
 		String printable = gi.print(maze.getMaze());
 		mazeArea.setText(printable);
@@ -510,52 +516,17 @@ public class Window {
 				status.setText("Move the hero. " +  dragonsAlive + " dragons to go.");
 		}
 	}
+	
+	public void initializeGame(boolean buildMode, Maze maze) {
+		setInputs(true);
+		char[][] matrix = maze.getMaze();
+		
+		//mazeArea.setEditable(true);
 
-	public void startGame(boolean buildMode) {
-		String inputSize = txtMazeSize.getText();
-		mazeSize = Integer.parseInt(inputSize);
 		graphicMode = graphicMazeSel.isSelected();
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int maxHeight = dimension.height / 50 - 2;
-
-		if(mazeSize <= 5) // dimension must be higher than five
-		{
-			mazeSize = 7;
-			txtMazeSize.setText("7");
-		}
-		else if(mazeSize % 2 == 0) // dimension must be odd
-		{
-			mazeSize++;
-			Integer mS = mazeSize;
-			txtMazeSize.setText(mS.toString());
-		}
-
-		// since freeSpaces = 7 * mazeSize - 35 and maxDragons = freeSpaces / 7 
-		int maxNumberDragons = mazeSize - 5;
-
-		String inputDragons = txtNumberOfDragons.getText();
-		numberDragons = Integer.parseInt(inputDragons);
-		if(numberDragons < 0 || randomDragons.isSelected())
-		{
-			numberDragons = 0;	
-		}
-		else if (numberDragons > maxNumberDragons)
-		{
-			numberDragons = maxNumberDragons;
-			Integer nD = numberDragons;
-			txtNumberOfDragons.setText(nD.toString());
-		}
-
-		mazeArea.setEditable(true);
-		btnUp.setEnabled(true);
-		btnLeft.setEnabled(true);
-		btnRight.setEnabled(true);
-		btnDown.setEnabled(true);
-
-		MazeBuilder mb = new MazeBuilder(mazeSize, numberDragons);
-		char [][] matrix = mb.getMaze();
-		maze = new Maze(matrix);
-
+		
 		if(graphicMode)
 		{
 			if(GM != null)
@@ -565,7 +536,7 @@ public class Window {
 				mazeSize = maxHeight;
 				Integer mS = mazeSize;
 				txtMazeSize.setText(mS.toString());
-				mb = new MazeBuilder(mazeSize, numberDragons);
+				MazeBuilder mb = new MazeBuilder(mazeSize, numberDragons);
 				matrix = mb.getMaze();
 				maze = new Maze(matrix);
 			}
@@ -606,30 +577,86 @@ public class Window {
 		mazeArea.setText(printable);
 	}
 
+	public void startGame(boolean buildMode) {
+		String inputSize = txtMazeSize.getText();
+		mazeSize = Integer.parseInt(inputSize);
+		
+		if(mazeSize <= 5) // dimension must be higher than five
+		{
+			mazeSize = 7;
+			txtMazeSize.setText("7");
+		}
+		else if(mazeSize % 2 == 0) // dimension must be odd
+		{
+			mazeSize++;
+			Integer mS = mazeSize;
+			txtMazeSize.setText(mS.toString());
+		}
+
+		// since freeSpaces = 7 * mazeSize - 35 and maxDragons = freeSpaces / 7 
+		int maxNumberDragons = mazeSize - 5;
+
+		String inputDragons = txtNumberOfDragons.getText();
+		numberDragons = Integer.parseInt(inputDragons);
+		if(numberDragons < 0 || randomDragons.isSelected())
+		{
+			numberDragons = 0;	
+		}
+		else if (numberDragons > maxNumberDragons)
+		{
+			numberDragons = maxNumberDragons;
+			Integer nD = numberDragons;
+			txtNumberOfDragons.setText(nD.toString());
+		}
+		
+		MazeBuilder mb = new MazeBuilder(mazeSize, numberDragons);
+		char [][] matrix = mb.getMaze();
+		maze = new Maze(matrix);
+		
+		initializeGame(buildMode, maze);
+	}
+
 	private void addBuildOptions() {
 		MazePanel panel = GM.getPanel();
+		
+		JButton btnPlay = new JButton("Play Game");
+		btnPlay.setFocusable(false);
+		btnPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				GM.startPlayMode();
+			}
+		});
+		btnPlay.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		GM.getPanel().add(btnPlay);
+		btnPlay.setBounds((GM.getSize() - 1) * 50 + 40, ((GM.getSize() / 2)) * 50, 120, 25);
+		
 
 		panel.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int x = e.getX() / 50;
-				int y = e.getY() / 50;
-				if (maze.getMaze()[y][x] == 'H')
-					System.out.println("Hero selected");
-				if (maze.getMaze()[y][x] == 'D')
-					System.out.println("Dragon selected");
-				if (maze.getMaze()[y][x] == 'E')
-					System.out.println("Sword selected");
-				if (maze.getMaze()[y][x] == 'S')
-					System.out.println("Exit selected");
-				if (maze.getMaze()[y][x] == ' ')
-					System.out.println("Empty space selected");
-				if (maze.getMaze()[y][x] == 'X')
-					System.out.println("Wall selected");
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if (GM.getBuildMode()) {
+					int x = e.getX() / 50;
+					int y = e.getY() / 50;
+					if (x < GM.getSize() - 1) {
+						if (maze.getMaze()[y][x] == 'H')
+							System.out.println("Hero selected");
+						if (maze.getMaze()[y][x] == 'D')
+							System.out.println("Dragon selected");
+						if (maze.getMaze()[y][x] == 'E')
+							System.out.println("Sword selected");
+						if (maze.getMaze()[y][x] == 'S')
+							System.out.println("Exit selected");
+						if (maze.getMaze()[y][x] == ' ')
+							System.out.println("Empty space selected");
+						if (maze.getMaze()[y][x] == 'X')
+							System.out.println("Wall selected");
+					}
+				}
 			}
 
 			@Override

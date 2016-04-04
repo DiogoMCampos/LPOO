@@ -22,6 +22,7 @@ public class GraphicMaze {
 	private Maze maze;
 	private int x, y;
 	private boolean buildMode;
+	private int windowX, windowY;
 
 
 	/**
@@ -32,6 +33,8 @@ public class GraphicMaze {
 		this.maze = maze;
 		this.x = x;
 		this.buildMode = buildMode;
+		this.windowX = size * 50 - 32;
+		this.windowY = size * 50 - 3;
 		initialize();
 	}
 
@@ -41,12 +44,17 @@ public class GraphicMaze {
 	private void initialize() {
 		MazeFrame = new JFrame();
 		MazeFrame.setTitle("Graphic Maze");
-		MazeFrame.setBounds(100, 100, size * 50, size * 50);
-		MazeFrame.setPreferredSize(new Dimension(size * 50, size * 50));
-		MazeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		if (buildMode) {
 			displayInstructions();
+			MazeFrame.setBounds(100, 100, windowX + 200, windowY);
+			MazeFrame.setPreferredSize(new Dimension(windowX + 200, windowY));
+			MazeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		}
+		else {
+			MazeFrame.setBounds(100, 100, windowX, windowY);
+			MazeFrame.setPreferredSize(new Dimension(windowX, windowY));
+			MazeFrame.setLocation(x, y);
 		}
 		
 		x += 565;
@@ -54,6 +62,7 @@ public class GraphicMaze {
 		
 		MazeFrame.setLocation(x, y);
 		panel = new MazePanel(maze.getMaze(), maze.dragonsAlive());
+		panel.setLayout(null);
 		MazeFrame.getContentPane().add(panel);
 
 		MazeFrame.pack();
@@ -93,5 +102,26 @@ public class GraphicMaze {
 				+ "\nIf you'd like to modify the walls or ground, use the buttons accordingly.", 
 				"Maze Builder Instructions",
 				JOptionPane.PLAIN_MESSAGE);
+	}
+	
+	public void startPlayMode()
+	{
+		this.buildMode = false;
+		MazeFrame.setBounds(100, 100, windowX, windowY);
+		MazeFrame.setPreferredSize(new Dimension(windowX, windowY));
+		MazeFrame.setLocation(x, y);
+		
+	}
+
+	public int getSize() {
+		return size;
+	}
+	
+	public boolean getBuildMode() {
+		return buildMode;
+	}
+	
+	public int getWindowX() {
+		return windowX;
 	}
 }
