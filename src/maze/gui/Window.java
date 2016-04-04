@@ -12,6 +12,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import maze.io.FileIO;
 import maze.logic.Maze;
 import maze.logic.MazeBuilder;
 
@@ -32,6 +33,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class Window {
 
@@ -59,6 +65,17 @@ public class Window {
 	private KeyStroke rightKeyStroke;
 	private KeyStroke leftKeyStroke;
 
+	private JMenu mnFile;
+	private JMenu mnLoadGame;
+	private JMenuItem mntmGame;
+	private JMenuItem mntmGame_1;
+	private JMenuItem mntmGame_2;
+	private JMenu mnSaveGame;
+	private JMenuItem mntmGame_3;
+	private JMenuItem mntmGame_4;
+	private JMenuItem mntmGame_5;
+	private JMenuItem mntmExit;
+
 	private Maze maze;
 	private GraphicInterface gi = new GraphicInterface();
 	private int mazeSize = 11;
@@ -67,6 +84,8 @@ public class Window {
 	private GraphicMaze GM;
 	private boolean graphicMode;
 	private JButton btnOpenMazeBuilder;
+	
+	private FileIO fio;
 
 
 	/**
@@ -105,7 +124,8 @@ public class Window {
 		initializeRootPane();
 		initializeMazeOptions();
 		initializeButtons();
-		
+		initializeMenuBar();
+
 		mazeArea = new JTextArea();
 		mazeArea.setFont(new Font("Courier New", Font.PLAIN, 13));
 		mazeArea.setEditable(false);
@@ -117,14 +137,143 @@ public class Window {
 		status.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		status.setBounds(54, 432, 260, 25);
 		frame.getContentPane().add(status);
+
+
 	}
 
-	public void closeInputs()
+	public void setInputs(boolean mode)
 	{
-		btnRight.setEnabled(false);
-		btnLeft.setEnabled(false);
-		btnUp.setEnabled(false);
-		btnDown.setEnabled(false);
+		btnRight.setEnabled(mode);
+		btnLeft.setEnabled(mode);
+		btnUp.setEnabled(mode);
+		btnDown.setEnabled(mode);
+	}
+
+	public void initializeMenuBar()
+	{
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+
+		mnFile = new JMenu("File");
+		mnFile.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		menuBar.add(mnFile);
+
+		mnLoadGame = new JMenu("Load Game");
+		mnLoadGame.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mnFile.add(mnLoadGame);
+
+		mntmGame = new JMenuItem("Game 1");
+		mntmGame.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mntmGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				try {
+					fio = new FileIO(1);
+					fio.readMaze();
+					maze = new Maze(fio.getMaze());
+					mazeArea.setText(gi.print(maze.getMaze()));
+					setInputs(true);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnLoadGame.add(mntmGame);
+
+		mntmGame_1 = new JMenuItem("Game 2");
+		mntmGame_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mntmGame_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				try {
+					fio = new FileIO(2);
+					fio.readMaze();
+					maze = new Maze(fio.getMaze());
+					mazeArea.setText(gi.print(maze.getMaze()));
+					setInputs(true);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnLoadGame.add(mntmGame_1);
+
+		mntmGame_2 = new JMenuItem("Game 3");
+		mntmGame_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mntmGame_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				try {
+					fio = new FileIO(3);
+					fio.readMaze();
+					maze = new Maze(fio.getMaze());
+					mazeArea.setText(gi.print(maze.getMaze()));
+					setInputs(true);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnLoadGame.add(mntmGame_2);
+
+		mnSaveGame = new JMenu("Save Game");
+		mnSaveGame.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mnFile.add(mnSaveGame);
+
+		mntmGame_3 = new JMenuItem("Game 1");
+		mntmGame_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mntmGame_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				try {
+					fio = new FileIO(1);
+					fio.writeMaze(maze.getMaze(), 1);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnSaveGame.add(mntmGame_3);
+
+		mntmGame_4 = new JMenuItem("Game 2");
+		mntmGame_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mntmGame_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				try {
+					fio = new FileIO(2);
+					fio.writeMaze(maze.getMaze(), 2);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnSaveGame.add(mntmGame_4);
+
+		mntmGame_5 = new JMenuItem("Game 3");
+		mntmGame_5.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mntmGame_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				try {
+					fio = new FileIO(3);
+					fio.writeMaze(maze.getMaze(), 3);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnSaveGame.add(mntmGame_5);
+		
+		mntmExit = new JMenuItem("Exit");
+		mntmExit.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mntmExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				System.exit(0);
+			}
+		});
+		mnFile.add(mntmExit);
 	}
 
 	public void initializeRootPane()
@@ -236,18 +385,19 @@ public class Window {
 		cbDragonMode.addItem("Random movement");
 		cbDragonMode.addItem("Random movement and sleep");
 		frame.getContentPane().add(cbDragonMode);
-		
+
 		// Initializes the CheckBox related to the graphical mode
 		graphicMazeSel = new JCheckBox("Graphic Maze");
 		graphicMazeSel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		graphicMazeSel.setBounds(397, 135, 107, 23);
+		graphicMazeSel.setSelected(true);
 		frame.getContentPane().add(graphicMazeSel);
 	}
-	
+
 	public void initializeButtons() {
-		
+
 		initializeMovementButtons();
-		
+
 		btnNewMaze = new JButton("New Maze");
 		btnNewMaze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
@@ -269,8 +419,8 @@ public class Window {
 		btnExitGame.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnExitGame.setBounds(397, 85, 107, 23);
 		frame.getContentPane().add(btnExitGame);
-		
-		
+
+
 		// Initializes the button that opens the Maze Builder
 		btnOpenMazeBuilder = new JButton("Open Maze Builder");
 		btnOpenMazeBuilder.addActionListener(new ActionListener() {
@@ -283,9 +433,9 @@ public class Window {
 		btnOpenMazeBuilder.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnOpenMazeBuilder.setBounds(376, 176, 146, 23);
 		frame.getContentPane().add(btnOpenMazeBuilder);
-		
+
 	}
-	
+
 	public void initializeMovementButtons() {
 		btnUp = new JButton("Up");
 		btnUp.setEnabled(false);
@@ -331,20 +481,20 @@ public class Window {
 		btnDown.setBounds(395, 322, 70, 23);
 		frame.getContentPane().add(btnDown);	
 	}
-	
+
 	public void updateMovement(int direction) {
 		maze.updateGame(direction);
 		String printable = gi.print(maze.getMaze());
 		mazeArea.setText(printable);
 
 		int dragonsAlive = maze.dragonsAlive();
-		
+
 		if(graphicMode)
 			GM.updatePanel();
-			
+
 		if(maze.getFinished())
 		{
-			closeInputs();
+			setInputs(false);
 			if(dragonsAlive == 0)
 				status.setText("You won the game");
 			else
@@ -360,14 +510,14 @@ public class Window {
 				status.setText("Move the hero. " +  dragonsAlive + " dragons to go.");
 		}
 	}
-	
+
 	public void startGame(boolean buildMode) {
 		String inputSize = txtMazeSize.getText();
 		mazeSize = Integer.parseInt(inputSize);
 		graphicMode = graphicMazeSel.isSelected();
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int maxHeight = dimension.height / 50 - 2;
-		
+
 		if(mazeSize <= 5) // dimension must be higher than five
 		{
 			mazeSize = 7;
@@ -379,7 +529,7 @@ public class Window {
 			Integer mS = mazeSize;
 			txtMazeSize.setText(mS.toString());
 		}
-		
+
 		// since freeSpaces = 7 * mazeSize - 35 and maxDragons = freeSpaces / 7 
 		int maxNumberDragons = mazeSize - 5;
 
@@ -405,7 +555,7 @@ public class Window {
 		MazeBuilder mb = new MazeBuilder(mazeSize, numberDragons);
 		char [][] matrix = mb.getMaze();
 		maze = new Maze(matrix);
-		
+
 		if(graphicMode)
 		{
 			if(GM != null)
@@ -421,19 +571,19 @@ public class Window {
 			}
 			GM = new GraphicMaze(maze, frame.getLocationOnScreen().x, buildMode);
 			GM.getFrame().addKeyListener(new KeyListener() {
-                @Override
-                public void keyPressed(KeyEvent e) {
-                	int key = e.getKeyCode();
+				@Override
+				public void keyPressed(KeyEvent e) {
+					int key = e.getKeyCode();
 
-    				if (key == KeyEvent.VK_RIGHT)
-    					btnRight.doClick();
-    				else if (key == KeyEvent.VK_DOWN)
-    					btnDown.doClick();
-    				else if (key == KeyEvent.VK_LEFT)
-    					btnLeft.doClick();
-    				else if (key == KeyEvent.VK_UP)
-    					btnUp.doClick();
-                }
+					if (key == KeyEvent.VK_RIGHT)
+						btnRight.doClick();
+					else if (key == KeyEvent.VK_DOWN)
+						btnDown.doClick();
+					else if (key == KeyEvent.VK_LEFT)
+						btnLeft.doClick();
+					else if (key == KeyEvent.VK_UP)
+						btnUp.doClick();
+				}
 
 				@Override
 				public void keyReleased(KeyEvent arg0) {
@@ -442,7 +592,7 @@ public class Window {
 				@Override
 				public void keyTyped(KeyEvent arg0) {
 				}
-            });
+			});
 			if (buildMode)
 				addBuildOptions();
 		}
@@ -458,7 +608,7 @@ public class Window {
 
 	private void addBuildOptions() {
 		MazePanel panel = GM.getPanel();
-		
+
 		panel.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -494,6 +644,5 @@ public class Window {
 			public void mouseExited(MouseEvent e) {
 			}	
 		});
-		
 	}
 }
