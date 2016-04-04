@@ -118,7 +118,7 @@ public class Window {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Maze Game");
-		frame.setBounds(100, 100, 561, 501);
+		frame.setBounds(100, 100, 560, 530);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
