@@ -158,6 +158,7 @@ public class Maze
 	
 	/**
 	 * Checks and handles if there are any collisions between dragons and the hero
+	 * @param currentDragon the dragon to handle collision
 	 */
 	public void heroDragonCollisions(Dragon currentDragon) 
 	{

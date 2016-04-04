@@ -19,7 +19,6 @@ public class MazeBuilder
 
 	/**
 	 * Returns the maze created by the MazeBuilder object
-	 * 
 	 * @return the maze created by the MazeBuilder object
 	 */
 	public char[][] getMaze()
@@ -28,7 +27,6 @@ public class MazeBuilder
 	}
 	
 	/**
-	 * 
 	 * MazeBuilder constructor 
 	 * Randomly generates a maze given it's size (side length) and number of dragons.
 	 * In the event that nDragons is 0, the number of dragons is randomly generated.
@@ -101,7 +99,6 @@ public class MazeBuilder
 	 * 
 	 * @param size the size of the maze to generate
 	 */
-
 	private void initializeMazeBuilder(int size) 
 	{
 		size = (size % 2 == 0) ? ++size : size;
@@ -120,7 +117,6 @@ public class MazeBuilder
 	
 	/**
 	 * Generates the exit point and the point where the maze generation starts
-	 * 
 	 * @return the starting point for the maze generation
 	 */
 	private Point genStartingPoint()

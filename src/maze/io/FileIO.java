@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.PrintWriter;
 
 public class FileIO
@@ -18,10 +19,13 @@ public class FileIO
 	{
 		FileReader fr;
 		BufferedReader mazeReader;
-
+		
 		this.file = file;
 		this.name = "savedMaze" + file + ".txt";
 		
+		File fi = new File(name);
+		if(!fi.exists())
+			fi.createNewFile();
 		fr = new FileReader(name);
 		mazeReader = new BufferedReader(fr);
 
