@@ -41,16 +41,16 @@ public class MazePanel extends JPanel {
 	 */
 	public MazePanel(char[][] maze, int numDragonsAlive) {
 		try {
-			wall =  ImageIO.read(new File("wall.png"));
-			floor = ImageIO.read(new File("floor1.png"));
-			unarmedHero = ImageIO.read(new File("unhero.png"));
-			armedHero = ImageIO.read(new File("arhero.png"));
-			dragon = ImageIO.read(new File("dragon.png"));
-			sword = ImageIO.read(new File("sword.png"));
-			openDoor = ImageIO.read(new File("opendoor.png"));
-			closedDoor = ImageIO.read(new File("closeddoor.png"));
-			sleepyDragon = ImageIO.read(new File("sleepyDragon.png"));
-			armedDragon = ImageIO.read(new File("armedDragon.png"));
+			wall =  ImageIO.read(new File("resources//wall.png"));
+			floor = ImageIO.read(new File("resources//floor1.png"));
+			unarmedHero = ImageIO.read(new File("resources//unhero.png"));
+			armedHero = ImageIO.read(new File("resources//arhero.png"));
+			dragon = ImageIO.read(new File("resources//dragon.png"));
+			sword = ImageIO.read(new File("resources//sword.png"));
+			openDoor = ImageIO.read(new File("resources//opendoor.png"));
+			closedDoor = ImageIO.read(new File("resources//closeddoor.png"));
+			sleepyDragon = ImageIO.read(new File("resources//sleepyDragon.png"));
+			armedDragon = ImageIO.read(new File("resources//armedDragon.png"));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
