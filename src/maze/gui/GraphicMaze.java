@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import maze.logic.Maze;
 import maze.gui.MazePanel;
@@ -20,17 +21,17 @@ public class GraphicMaze {
 	private MazePanel panel;
 	private Maze maze;
 	private int x, y;
-	//private boolean buildMode;
+	private boolean buildMode;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GraphicMaze(Maze maze, int x) {
+	public GraphicMaze(Maze maze, int x, boolean buildMode) {
 		this.size = maze.getMaze().length + 1;
 		this.maze = maze;
 		this.x = x;
-		//this.buildMode = buildMode;
+		this.buildMode = buildMode;
 		initialize();
 	}
 
@@ -44,6 +45,10 @@ public class GraphicMaze {
 		MazeFrame.setPreferredSize(new Dimension(size * 50, size * 50));
 		MazeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
+		if (buildMode) {
+			displayInstructions();
+		}
+		
 		x += 565;
 		y = MazeFrame.getY();
 		
@@ -54,32 +59,6 @@ public class GraphicMaze {
 		MazeFrame.pack();
 		
 		MazeFrame.setVisible(true);
-		
-		panel.addMouseListener(new MouseListener(){
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				x = e.getX();
-				y = e.getY();
-				System.out.println(x);
-				System.out.println(y);
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}	
-		});
 		
 		//panel.requestFocus();
 	}
@@ -98,5 +77,21 @@ public class GraphicMaze {
 	public JFrame getFrame()
 	{
 		return MazeFrame;
+	}
+	
+	public MazePanel getPanel()
+	{
+		return panel;
+	}
+	
+	public void displayInstructions()
+	{
+		JOptionPane.showMessageDialog(MazeFrame,
+				"The maze was generated randomly, but you can modify it."
+				+ "\nIn order to do so, you can click on the Hero, Sword or Dragon(s) "
+				+ "and click on the new position."
+				+ "\nIf you'd like to modify the walls or ground, use the buttons accordingly.", 
+				"Maze Builder Instructions",
+				JOptionPane.PLAIN_MESSAGE);
 	}
 }

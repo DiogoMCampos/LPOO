@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Window {
 
@@ -240,12 +242,6 @@ public class Window {
 		graphicMazeSel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		graphicMazeSel.setBounds(397, 135, 107, 23);
 		frame.getContentPane().add(graphicMazeSel);
-		
-		// Initializes the button that opens the Maze Builder
-		btnOpenMazeBuilder = new JButton("Open Maze Builder");
-		btnOpenMazeBuilder.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnOpenMazeBuilder.setBounds(376, 176, 146, 23);
-		frame.getContentPane().add(btnOpenMazeBuilder);
 	}
 	
 	public void initializeButtons() {
@@ -256,97 +252,7 @@ public class Window {
 		btnNewMaze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				String inputSize = txtMazeSize.getText();
-				mazeSize = Integer.parseInt(inputSize);
-				graphicMode = graphicMazeSel.isSelected();
-				Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-				int maxHeight = dimension.height / 50 - 2;
-				
-				if(mazeSize <= 5) // dimension must be higher than five
-				{
-					mazeSize = 7;
-					txtMazeSize.setText("7");
-				}
-				else if(mazeSize % 2 == 0) // dimension must be odd
-				{
-					mazeSize++;
-					Integer mS = mazeSize;
-					txtMazeSize.setText(mS.toString());
-				}
-				
-				// since freeSpaces = 7 * mazeSize - 35 and maxDragons = freeSpaces / 7 
-				int maxNumberDragons = mazeSize - 5;
-
-				String inputDragons = txtNumberOfDragons.getText();
-				numberDragons = Integer.parseInt(inputDragons);
-				if(numberDragons < 0 || randomDragons.isSelected())
-				{
-					numberDragons = 0;	
-				}
-				else if (numberDragons > maxNumberDragons)
-				{
-					numberDragons = maxNumberDragons;
-					Integer nD = numberDragons;
-					txtNumberOfDragons.setText(nD.toString());
-				}
-
-				mazeArea.setEditable(true);
-				btnUp.setEnabled(true);
-				btnLeft.setEnabled(true);
-				btnRight.setEnabled(true);
-				btnDown.setEnabled(true);
-
-				MazeBuilder mb = new MazeBuilder(mazeSize, numberDragons);
-				char [][] matrix = mb.getMaze();
-				maze = new Maze(matrix);
-				
-				if(graphicMode)
-				{
-					if(GM != null)
-						GM.closeWindow();
-					if(mazeSize > maxHeight)
-					{
-						mazeSize = maxHeight;
-						Integer mS = mazeSize;
-						txtMazeSize.setText(mS.toString());
-						mb = new MazeBuilder(mazeSize, numberDragons);
-						matrix = mb.getMaze();
-						maze = new Maze(matrix);
-					}
-					GM = new GraphicMaze(maze, frame.getLocationOnScreen().x);
-					
-					GM.getFrame().addKeyListener(new KeyListener() {
-	                    @Override
-	                    public void keyPressed(KeyEvent e) {
-	                    	int key = e.getKeyCode();
-
-	        				if (key == KeyEvent.VK_RIGHT)
-	        					btnRight.doClick();
-	        				else if (key == KeyEvent.VK_DOWN)
-	        					btnDown.doClick();
-	        				else if (key == KeyEvent.VK_LEFT)
-	        					btnLeft.doClick();
-	        				else if (key == KeyEvent.VK_UP)
-	        					btnUp.doClick();
-	                    }
-
-						@Override
-						public void keyReleased(KeyEvent arg0) {
-						}
-
-						@Override
-						public void keyTyped(KeyEvent arg0) {
-						}
-	                });
-				}
-
-				status.setText("Move the hero to pick the sword.");
-
-				int mode = cbDragonMode.getSelectedIndex();
-				maze.setMode(mode);
-
-				String printable = gi.print(matrix);
-				mazeArea.setText(printable);
+				startGame(false);
 			}
 		});
 		btnNewMaze.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -363,6 +269,20 @@ public class Window {
 		btnExitGame.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnExitGame.setBounds(397, 85, 107, 23);
 		frame.getContentPane().add(btnExitGame);
+		
+		
+		// Initializes the button that opens the Maze Builder
+		btnOpenMazeBuilder = new JButton("Open Maze Builder");
+		btnOpenMazeBuilder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				graphicMazeSel.setSelected(true);
+				startGame(true);
+			}
+		});
+		btnOpenMazeBuilder.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnOpenMazeBuilder.setBounds(376, 176, 146, 23);
+		frame.getContentPane().add(btnOpenMazeBuilder);
 		
 	}
 	
@@ -439,5 +359,141 @@ public class Window {
 			else
 				status.setText("Move the hero. " +  dragonsAlive + " dragons to go.");
 		}
+	}
+	
+	public void startGame(boolean buildMode) {
+		String inputSize = txtMazeSize.getText();
+		mazeSize = Integer.parseInt(inputSize);
+		graphicMode = graphicMazeSel.isSelected();
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int maxHeight = dimension.height / 50 - 2;
+		
+		if(mazeSize <= 5) // dimension must be higher than five
+		{
+			mazeSize = 7;
+			txtMazeSize.setText("7");
+		}
+		else if(mazeSize % 2 == 0) // dimension must be odd
+		{
+			mazeSize++;
+			Integer mS = mazeSize;
+			txtMazeSize.setText(mS.toString());
+		}
+		
+		// since freeSpaces = 7 * mazeSize - 35 and maxDragons = freeSpaces / 7 
+		int maxNumberDragons = mazeSize - 5;
+
+		String inputDragons = txtNumberOfDragons.getText();
+		numberDragons = Integer.parseInt(inputDragons);
+		if(numberDragons < 0 || randomDragons.isSelected())
+		{
+			numberDragons = 0;	
+		}
+		else if (numberDragons > maxNumberDragons)
+		{
+			numberDragons = maxNumberDragons;
+			Integer nD = numberDragons;
+			txtNumberOfDragons.setText(nD.toString());
+		}
+
+		mazeArea.setEditable(true);
+		btnUp.setEnabled(true);
+		btnLeft.setEnabled(true);
+		btnRight.setEnabled(true);
+		btnDown.setEnabled(true);
+
+		MazeBuilder mb = new MazeBuilder(mazeSize, numberDragons);
+		char [][] matrix = mb.getMaze();
+		maze = new Maze(matrix);
+		
+		if(graphicMode)
+		{
+			if(GM != null)
+				GM.closeWindow();
+			if(mazeSize > maxHeight)
+			{
+				mazeSize = maxHeight;
+				Integer mS = mazeSize;
+				txtMazeSize.setText(mS.toString());
+				mb = new MazeBuilder(mazeSize, numberDragons);
+				matrix = mb.getMaze();
+				maze = new Maze(matrix);
+			}
+			GM = new GraphicMaze(maze, frame.getLocationOnScreen().x, buildMode);
+			GM.getFrame().addKeyListener(new KeyListener() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                	int key = e.getKeyCode();
+
+    				if (key == KeyEvent.VK_RIGHT)
+    					btnRight.doClick();
+    				else if (key == KeyEvent.VK_DOWN)
+    					btnDown.doClick();
+    				else if (key == KeyEvent.VK_LEFT)
+    					btnLeft.doClick();
+    				else if (key == KeyEvent.VK_UP)
+    					btnUp.doClick();
+                }
+
+				@Override
+				public void keyReleased(KeyEvent arg0) {
+				}
+
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+				}
+            });
+			if (buildMode)
+				addBuildOptions();
+		}
+
+		status.setText("Move the hero to pick the sword.");
+
+		int mode = cbDragonMode.getSelectedIndex();
+		maze.setMode(mode);
+
+		String printable = gi.print(matrix);
+		mazeArea.setText(printable);
+	}
+
+	private void addBuildOptions() {
+		MazePanel panel = GM.getPanel();
+		
+		panel.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX() / 50;
+				int y = e.getY() / 50;
+				if (maze.getMaze()[y][x] == 'H')
+					System.out.println("Hero selected");
+				if (maze.getMaze()[y][x] == 'D')
+					System.out.println("Dragon selected");
+				if (maze.getMaze()[y][x] == 'E')
+					System.out.println("Sword selected");
+				if (maze.getMaze()[y][x] == 'S')
+					System.out.println("Exit selected");
+				if (maze.getMaze()[y][x] == ' ')
+					System.out.println("Empty space selected");
+				if (maze.getMaze()[y][x] == 'X')
+					System.out.println("Wall selected");
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}	
+		});
+		
 	}
 }
