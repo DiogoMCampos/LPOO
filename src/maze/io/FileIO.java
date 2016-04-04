@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.io.FileNotFoundException;
 
 public class FileIO
 {
@@ -23,7 +22,6 @@ public class FileIO
 		this.file = file;
 		this.name = "savedMaze" + file + ".txt";
 		
-		System.out.println(name);
 		fr = new FileReader(name);
 		mazeReader = new BufferedReader(fr);
 
@@ -44,7 +42,7 @@ public class FileIO
 		return maze;
 	}
 	
-	public void readMaze() throws IOException
+	public void readMaze() throws IOException, InvalidMaze
 	{
 		FileReader fr;
 		BufferedReader mazeReader;
@@ -61,7 +59,8 @@ public class FileIO
 				maze[i][j] = line.charAt(j);
 			}
 		}
-
+		if(size < 5)
+			throw new InvalidMaze();
 		mazeReader.close();
 	}
 

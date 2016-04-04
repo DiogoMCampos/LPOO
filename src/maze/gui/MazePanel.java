@@ -28,6 +28,17 @@ public class MazePanel extends JPanel {
 	private int numDragonsAlive;
 	private char[][] maze;
 
+	
+	/**
+	 * Loads the graphic maze. The images used were taken from:
+	 * http://opengameart.org/content/lots-of-free-2d-tiles-and-sprites-by-hyptosis
+	 * and the door was taken from:
+	 * http://opengameart.org/content/cute-dungeon-lpc-edit
+	 * Some images were edited such as the door, the hero or the dragon.
+	 * A big thanks to the authors: Hyptosis and Zabin (1st link), Buch, Sharm and William.Thompsonj
+	 * @param maze the matrix to display
+	 * @param numDragonsAlive number of dragons alive
+	 */
 	public MazePanel(char[][] maze, int numDragonsAlive) {
 		try {
 			wall =  ImageIO.read(new File("wall.png"));

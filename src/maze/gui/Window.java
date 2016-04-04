@@ -13,6 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import maze.io.FileIO;
+import maze.io.InvalidMaze;
 import maze.logic.Maze;
 import maze.logic.MazeBuilder;
 
@@ -177,6 +178,10 @@ public class Window {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				catch (InvalidMaze im)
+				{
+				}
+				
 			}
 		});
 		mnLoadGame.add(mntmGame);
@@ -196,6 +201,9 @@ public class Window {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				catch (InvalidMaze im)
+				{
+				}
 			}
 		});
 		mnLoadGame.add(mntmGame_1);
@@ -214,6 +222,9 @@ public class Window {
 					initializeGame(false, maze);
 				} catch (IOException e1) {
 					e1.printStackTrace();
+				}
+				catch (InvalidMaze im)
+				{
 				}
 			}
 		});
