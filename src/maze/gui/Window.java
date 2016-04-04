@@ -546,13 +546,13 @@ public class Window {
 				public void keyPressed(KeyEvent e) {
 					int key = e.getKeyCode();
 
-					if (key == KeyEvent.VK_RIGHT)
+					if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D)
 						btnRight.doClick();
-					else if (key == KeyEvent.VK_DOWN)
+					else if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S)
 						btnDown.doClick();
-					else if (key == KeyEvent.VK_LEFT)
+					else if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A)
 						btnLeft.doClick();
-					else if (key == KeyEvent.VK_UP)
+					else if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W)
 						btnUp.doClick();
 				}
 
@@ -564,8 +564,6 @@ public class Window {
 				public void keyTyped(KeyEvent arg0) {
 				}
 			});
-			if (buildMode)
-				addBuildOptions();
 		}
 
 		status.setText("Move the hero to pick the sword.");
@@ -614,62 +612,5 @@ public class Window {
 		maze = new Maze(matrix);
 		
 		initializeGame(buildMode, maze);
-	}
-
-	private void addBuildOptions() {
-		MazePanel panel = GM.getPanel();
-		
-		JButton btnPlay = new JButton("Play Game");
-		btnPlay.setFocusable(false);
-		btnPlay.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				GM.startPlayMode();
-			}
-		});
-		btnPlay.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		GM.getPanel().add(btnPlay);
-		btnPlay.setBounds((GM.getSize() - 1) * 50 + 40, ((GM.getSize() / 2)) * 50, 120, 25);
-		
-
-		panel.addMouseListener(new MouseListener(){
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if (GM.getBuildMode()) {
-					int x = e.getX() / 50;
-					int y = e.getY() / 50;
-					if (x < GM.getSize() - 1) {
-						if (maze.getMaze()[y][x] == 'H')
-							System.out.println("Hero selected");
-						if (maze.getMaze()[y][x] == 'D')
-							System.out.println("Dragon selected");
-						if (maze.getMaze()[y][x] == 'E')
-							System.out.println("Sword selected");
-						if (maze.getMaze()[y][x] == 'S')
-							System.out.println("Exit selected");
-						if (maze.getMaze()[y][x] == ' ')
-							System.out.println("Empty space selected");
-						if (maze.getMaze()[y][x] == 'X')
-							System.out.println("Wall selected");
-					}
-				}
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}	
-		});
 	}
 }

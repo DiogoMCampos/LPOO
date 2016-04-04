@@ -2,11 +2,15 @@ package maze.gui;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -69,7 +73,65 @@ public class GraphicMaze {
 		
 		MazeFrame.setVisible(true);
 		
+		if (buildMode)
+			addBuildOptions();
+		
 		//panel.requestFocus();
+	}
+	
+	private void addBuildOptions() {
+		JButton btnPlay = new JButton("Play Game");
+		btnPlay.setFocusable(false);
+		btnPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				startPlayMode();
+			}
+		});
+		btnPlay.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(btnPlay);
+		btnPlay.setBounds((size - 1) * 50 + 40, ((size / 2)) * 50, 120, 25);
+		
+
+		panel.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (buildMode) {
+					int x = e.getX() / 50;
+					int y = e.getY() / 50;
+					if (x < size - 1) {
+						if (maze.getMaze()[y][x] == 'H')
+							System.out.println("Hero selected");
+						if (maze.getMaze()[y][x] == 'D')
+							System.out.println("Dragon selected");
+						if (maze.getMaze()[y][x] == 'E')
+							System.out.println("Sword selected");
+						if (maze.getMaze()[y][x] == 'S')
+							System.out.println("Exit selected");
+						if (maze.getMaze()[y][x] == ' ')
+							System.out.println("Empty space selected");
+						if (maze.getMaze()[y][x] == 'X')
+							System.out.println("Wall selected");
+					}
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}	
+		});
 	}
 	
 	public void updatePanel()
