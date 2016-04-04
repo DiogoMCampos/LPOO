@@ -512,10 +512,16 @@ public class Window {
 		if(maze.getFinished())
 		{
 			setInputs(false);
-			if(dragonsAlive == 0)
+			if(dragonsAlive == 0) {
 				status.setText("You won the game");
-			else
+				if (graphicMode)
+					GM.displayWon();
+			}
+			else {
 				status.setText("You were killed!");
+				if (graphicMode)
+					GM.displayLost();
+			}
 		}
 		else
 		{

@@ -12,7 +12,9 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 
 import maze.logic.Dragon;
 import maze.logic.Maze;
@@ -29,9 +31,13 @@ public class GraphicMaze {
 	private int x, y;
 	private boolean buildMode;
 	private int windowX, windowY;
+	private JLabel status;
 
 	private char charSelected = 'N';
 	private Point positionSelected;
+	private boolean addWallMode;
+	private boolean deleteWallMode;
+	private boolean deleteDragonMode;
 
 
 
@@ -86,8 +92,45 @@ public class GraphicMaze {
 	}
 
 	private void addBuildOptions() {
-		int buttonX = (size - 1) * 50 + 40;
+		int buttonX = (size - 1) * 50 + 30;
 		int buttonY = ((size / 2) - 4) * 50;
+		
+		status = new JLabel("Nothing selected", SwingConstants.CENTER);
+		status.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		status.setBounds(buttonX - 20, buttonY - 50, 180, 25);
+		panel.add(status);
+		
+		JButton addWall = new JButton("Add Wall");
+		addWall.setFocusable(false);
+		addWall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				if (charSelected == 'N') {
+					addWallMode = true;
+					charSelected = 'M';
+					status.setText("Click to add a wall.");
+				}
+			}
+		});
+		addWall.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(addWall);
+		addWall.setBounds(buttonX, buttonY, 140, 25);
+		
+		JButton deleteWall = new JButton("Delete Wall");
+		deleteWall.setFocusable(false);
+		deleteWall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{	
+				if (charSelected == 'N') {
+					deleteWallMode = true;
+					charSelected = 'M';
+					status.setText("Click to delete a wall.");
+				}
+			}
+		});
+		deleteWall.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(deleteWall);
+		deleteWall.setBounds(buttonX, buttonY + 50, 140, 25);
 
 		JButton addDragon = new JButton("Add Dragon");
 		addDragon.setFocusable(false);
@@ -96,11 +139,30 @@ public class GraphicMaze {
 			{
 				charSelected = 'D';
 				positionSelected = new Point(-1, -1);
+				status.setText("Click to add a dragon.");
 			}
 		});
 		addDragon.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(addDragon);
-		addDragon.setBounds(buttonX, buttonY + 150, 120, 25);
+		addDragon.setBounds(buttonX, buttonY + 100, 140, 25);
+		
+		JButton deleteDragon = new JButton("Delete Dragon");
+		deleteDragon.setFocusable(false);
+		deleteDragon.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{	
+				if (charSelected == 'N' && maze.getDragons().size() != 0) {
+					deleteDragonMode = true;
+					charSelected = 'M';
+					status.setText("Click to delete a dragon.");
+				}
+				else
+					displayError("There are no dragons remaining to remove.");
+			}
+		});
+		deleteDragon.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(deleteDragon);
+		deleteDragon.setBounds(buttonX, buttonY + 150, 140, 25);
 
 		JButton btnPlay = new JButton("Play Game");
 		btnPlay.setFocusable(false);
@@ -112,7 +174,7 @@ public class GraphicMaze {
 		});
 		btnPlay.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(btnPlay);
-		btnPlay.setBounds(buttonX, buttonY + 200, 120, 25);
+		btnPlay.setBounds(buttonX, buttonY + 200, 140, 25);
 
 
 		panel.addMouseListener(new MouseListener(){
@@ -123,49 +185,76 @@ public class GraphicMaze {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (buildMode) {
-					int x = e.getX() / 50;
-					int y = e.getY() / 50;
-					if (x < size - 1) {
-						if (charSelected == 'N') {
-							charSelected = maze.getMaze()[y][x];
-							if (charSelected == ' ')
-								charSelected = 'N';
-							else  
-								positionSelected = new Point(x, y);
-						}
-						else {
-							if (maze.getMaze()[y][x] == ' ') {		
-								if (charSelected == 'H') {
-									maze.getMaze()[positionSelected.getY()][positionSelected.getX()] = ' ';
-									maze.getHero().setX(x);
-									maze.getHero().setY(y);
-								}
-								else if (charSelected == 'D') {
-									if (positionSelected.equals(new Point(-1, -1))) {
-										Dragon newDragon = new Dragon(x, y);
-										maze.getDragons().add(newDragon);
-									}
-									else {
-										for (int i = 0; i < maze.getDragons().size(); i++) {
-											Dragon currentDragon = maze.getDragons().get(i);
-											if (currentDragon.getPosition().equals(positionSelected)) {
-												int currentX = positionSelected.getX();
-												int currentY = positionSelected.getY();
-												currentDragon.setX(x);
-												currentDragon.setY(y);
-												maze.getMaze()[currentY][currentX] = ' ';
-											}
-										}
-									}
-									
-
-								}
-							}
-							maze.getMaze()[y][x] = charSelected;
+					int mouseX = e.getX() / 50;
+					int mouseY = e.getY() / 50;
+					if (addWallMode && mouseX < size - 1) {
+						if (maze.getMaze()[mouseY][mouseX] == ' ') {
+							maze.getMaze()[mouseY][mouseX] = 'X';
+							addWallMode = false;
 							charSelected = 'N';
-							updatePanel();
+							status.setText("Nothing selected.");
 						}
 					}
+					else if (deleteWallMode) {
+						if (mouseX > 0 && mouseY > 0 && mouseX < size - 2 && mouseY < size - 2) {
+							if (maze.getMaze()[mouseY][mouseX] == 'X')
+								maze.getMaze()[mouseY][mouseX] = ' ';
+							deleteWallMode = false;
+							charSelected = 'N';
+							status.setText("Nothing selected.");
+						}
+					}
+					else if (deleteDragonMode && mouseX < size -1) {
+						if (maze.getMaze()[mouseY][mouseX] == 'D') {
+							maze.getMaze()[mouseY][mouseX] = ' ';
+							Point dragonPosition = new Point(mouseX, mouseY);
+							int dragonIndex;
+							for (dragonIndex = 0; dragonIndex < maze.getDragons().size(); dragonIndex++)
+								if (maze.getDragons().get(dragonIndex).getPosition().equals(dragonPosition))
+									break;
+							maze.getDragons().remove(dragonIndex);
+							deleteDragonMode = false;
+							charSelected = 'N';
+							status.setText("Nothing selected.");
+						}
+					}
+					else if (mouseX < size - 1) {
+						// char 'N' is corresponds to no char selected
+						if (charSelected == 'N') {
+							charSelected = maze.getMaze()[mouseY][mouseX];
+							if (charSelected == ' ' || charSelected == 'X')
+								charSelected = 'N';
+							else  
+								positionSelected = new Point(mouseX, mouseY);
+							if (charSelected == 'H')
+								status.setText("Hero selected.");
+							if (charSelected == 'D')
+								status.setText("Dragon selected.");
+							if (charSelected == 'E')
+								status.setText("Sword selected.");
+							if (charSelected == 'S')
+								status.setText("Exit selected.");
+						}
+						else {
+							if (charSelected == 'S') {
+								if (mouseX == 0 && maze.getMaze()[mouseY][1] != 'X' || 
+										mouseX == size - 2 && maze.getMaze()[mouseY][size - 3] != 'X' || 
+										mouseY == 0 && maze.getMaze()[1][mouseX] != 'X' || 
+										mouseY == size - 2 && maze.getMaze()[size - 3][mouseX] != 'X') {
+									replaceCharacter(mouseX, mouseY, 'X');
+									status.setText("Nothing selected.");
+								} else {
+									displayError("That's not a valid position for an exit.");
+								}
+							}
+							else if (maze.getMaze()[mouseY][mouseX] == ' ') {
+									replaceCharacter(mouseX, mouseY, ' ');
+									status.setText("Nothing selected.");
+							}
+						}
+					}
+					
+					updatePanel();
 				}
 			}
 
@@ -214,6 +303,27 @@ public class GraphicMaze {
 						"Maze Builder Instructions",
 						JOptionPane.PLAIN_MESSAGE);
 	}
+	
+	public void displayError(String error) {
+		JOptionPane.showMessageDialog(MazeFrame,
+			    error,
+			    "Building error",
+			    JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void displayWon() {
+		JOptionPane.showMessageDialog(MazeFrame,
+			    "You won the game");
+		MazeFrame.dispose();
+	}
+	public void displayLost() {
+		JOptionPane.showMessageDialog(MazeFrame,
+			    "You lost the game",
+			    "Message",
+			    JOptionPane.ERROR_MESSAGE);
+		MazeFrame.dispose();
+	}
+
 
 	public void startPlayMode()
 	{
@@ -234,5 +344,35 @@ public class GraphicMaze {
 
 	public int getWindowX() {
 		return windowX;
+	}
+	
+	public void replaceCharacter(int mouseX, int mouseY, char replacement) {
+		int oldX = positionSelected.getX();
+		int	oldY = positionSelected.getY();
+		if (oldX != -1) // because when you add a new char, you don't have to delete anything
+			maze.getMaze()[oldY][oldX] = replacement;
+		if (charSelected == 'H') {
+			maze.getHero().setX(mouseX);
+			maze.getHero().setY(mouseY);
+		}
+		else if (charSelected == 'D') {
+			if (positionSelected.equals(new Point(-1, -1))) {
+				Dragon newDragon = new Dragon(mouseX, mouseY);
+				maze.getDragons().add(newDragon);
+			}
+			else {
+				for (int i = 0; i < maze.getDragons().size(); i++) {
+					Dragon currentDragon = maze.getDragons().get(i);
+					if (currentDragon.getPosition().equals(positionSelected)) {											
+						currentDragon.setX(mouseX);
+						currentDragon.setY(mouseY);
+						break;
+					}
+				}
+			}
+		}
+		
+		maze.getMaze()[mouseY][mouseX] = charSelected;
+		charSelected = 'N';
 	}
 }
