@@ -22,12 +22,12 @@ public class TestMazeDragonSleep
 		// If you add another dragon replace the index on "get" by it's index (the array is read from top to bottom and left to right)
 		Dragon currentDragon = dragons.get(0);
 		assertEquals(new Point(3, 3), currentDragon.getPosition());
-		assertEquals(new Point(3, 1), maze.getHeroPosition());
+		assertEquals(new Point(3, 1), maze.getHero().getPosition());
 		currentDragon.setSleep(true);
 		assertEquals('d', currentDragon.getChar());
 		maze.moveHero(0, 1);
-		assertEquals(new Point(3,2), maze.getHeroPosition());
-		assertEquals(true, maze.getHeroLife());
+		assertEquals(new Point(3,2), maze.getHero().getPosition());
+		assertEquals(true, maze.getHero().getLife());
 		currentDragon.setSleep(false);
 		assertEquals('D', currentDragon.getChar());
 		// End copying here
@@ -43,12 +43,12 @@ public class TestMazeDragonSleep
 		// If you add another dragon replace the index on "get" by it's index (the array is read from top to bottom and left to right)
 		Dragon currentDragon = dragons.get(0);
 		assertEquals(new Point(3, 3), currentDragon.getPosition());
-		assertEquals(new Point(3, 1), maze.getHeroPosition());
+		assertEquals(new Point(3, 1), maze.getHero().getPosition());
 		currentDragon.setSleep(true);
 		assertEquals('d', currentDragon.getChar());
 		maze.moveHero(-2, 2);
-		assertEquals(new Point(1, 3), maze.getHeroPosition());
-		assertEquals('A', maze.getHeroChar());
+		assertEquals(new Point(1, 3), maze.getHero().getPosition());
+		assertEquals('A', maze.getHero().getChar());
 		maze.moveHero(1, 0);
 		assertEquals(false, currentDragon.getLife());
 		// End copying here

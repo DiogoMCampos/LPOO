@@ -95,32 +95,14 @@ public class Maze
 		
 		return num;
 	}
-
+ 
 	/**
-	 * Returns the hero position
-	 * @return the Point where the Hero is located
+	 * Returns hero
+	 * @return hero
 	 */
-	public Point getHeroPosition() 
+	public Hero getHero() 
 	{
-		return hero.getPosition();
-	}
-
-	/**
-	 * Returns the Hero's char
-	 * @return the Hero's char
-	 */
-	public char getHeroChar()
-	{
-		return hero.getChar();
-	}
-
-	/**
-	 * Returns the hero's life
-	 * @return true if hero's alive, false otherwise
-	 */
-	public boolean getHeroLife()
-	{
-		return hero.getLife();
+		return hero;
 	}
 
 	/**
@@ -421,9 +403,7 @@ public class Maze
 		myMaze.endInterface();
 	}
 
-	public Hero getHero() {
-		return hero;
-	}
+
 
 }
 
